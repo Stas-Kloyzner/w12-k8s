@@ -10,9 +10,9 @@ const init = async () => {
 	try {
 		// connect to the local database server
 		const sql = postgres();
-
-		console.log( "dropping table, if exists..." );
-		await sql`DROP TABLE IF EXISTS measurements`;
+		
+		//console.log( "dropping table, if exists..." ); commented out to prevent data loss on repeated initdb call.
+		//await sql`DROP TABLE IF EXISTS measurements`;
 
 		console.log( "creating table..." );
 		await sql`CREATE TABLE IF NOT EXISTS measurements (
