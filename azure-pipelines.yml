@@ -25,6 +25,6 @@ stages:
 
     - script: |
         node -v
-        npm install npm@latest -g
+        sudo npm install npm@latest -g
         npm -v
-      displayName: 'npm install'
+      displayName: 'update npm to latest'
