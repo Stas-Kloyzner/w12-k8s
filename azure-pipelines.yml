@@ -48,8 +48,8 @@ stages:
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.BinariesDirectory)'
-        includeRootFolder: true
+        rootFolderOrFile: '$(Pipeline.Workspace)/s'
+        includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/wt-app.zip'
         replaceExistingArchive: true
