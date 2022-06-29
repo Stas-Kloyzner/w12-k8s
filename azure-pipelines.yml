@@ -23,15 +23,37 @@ stages:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
     
+    # - task: Npm@1
+    #   inputs:
+    #     command: custom
+    #     customCommand: 'install -g npm@latest'
+    #   displayName: 'Upgrade npm to latest version'
     - task: Npm@1
       inputs:
-        command: custom
-        customCommand: 'sudo npm install -g npm@latest'
-      displayName: 'Upgrade npm to latest version'
-    
-    
-    - task: CmdLine@2
+        command: install
+      displayName: 'install packege dependencies'
+  
+  - job: archive
+    displayName: zip archive
+
+    steps:
+    - task: ArchiveFiles@2
       inputs:
-        script: 'npm -v'
+        rootFolderOrFile: '$(Build.BinariesDirectory)'
+        includeRootFolder: true
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+        verbose: true
+  
+  - job: publish
+    displayName: publish artifact
+    
+    steps:
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
     
 
