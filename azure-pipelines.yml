@@ -46,23 +46,15 @@ stages:
         script: 'sudo apt-get -y install zip'
       displayName: 'install zip'
 
-  # - job: archive
-  #   displayName: zip archive
-
-  #   steps:
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(Build.BinariesDirectory)'
         includeRootFolder: true
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/wt-app.zip'
         replaceExistingArchive: true
         verbose: true
   
-  # - job: publish
-  #   displayName: publish artifact
-    
-  #   steps:
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
