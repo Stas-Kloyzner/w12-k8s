@@ -43,8 +43,8 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: 'echo $USER'
-      displayName: configure pm2 startup in systemd
+        script: 'sudo apt-get -y install zip'
+      displayName: 'install zip'
 
   # - job: archive
   #   displayName: zip archive
