@@ -28,6 +28,11 @@ stages:
         command: custom
         customCommand: 'install -g npm@latest'
       displayName: 'Upgrade npm to latest version'
+
+    - task: Npm@1
+      inputs:
+        command: install
+      displayName: 'npm install packages'
   
     # - task: Npm@1
     #   displayName: 'npm install'
