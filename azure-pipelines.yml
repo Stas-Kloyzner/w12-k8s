@@ -6,17 +6,16 @@
 trigger:
 - master
 
-parameters:
-  agentName: 'Any'
-  
+pool:
+  name: w7pool
+
 stages:
 - stage: Build
   displayName: Build stage
+  
   jobs:
   - job: Build
     displayName: Build
-    pool:
-      vmImage: $(vmImageName)
 
     steps:
     - task: NodeTool@0
@@ -26,5 +25,6 @@ stages:
 
     - script: |
         node -v
-        npm install
+        npm install npm@latest -g
+        npm -v
       displayName: 'npm install'
