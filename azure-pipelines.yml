@@ -41,10 +41,11 @@ stages:
         customCommand: 'install pm2@latest -g'
       displayName: 'install pm2'
 
-- task: CmdLine@2
-  inputs:
-    script: 'env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $USER --hp /home/$USER'
-  displayName: configure pm2 startup in systemd
+    - task: CmdLine@2
+      inputs:
+        script: 'env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $USER --hp /home/$USER'
+      displayName: configure pm2 startup in systemd
+
   # - job: archive
   #   displayName: zip archive
 
