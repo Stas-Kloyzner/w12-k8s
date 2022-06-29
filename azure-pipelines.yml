@@ -6,7 +6,9 @@
 trigger:
 - master
 
-
+parameters:
+  agentName: 'Any'
+  
 stages:
 - stage: Build
   displayName: Build stage
