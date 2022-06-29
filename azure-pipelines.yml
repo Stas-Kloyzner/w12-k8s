@@ -38,12 +38,6 @@ stages:
     - task: Npm@1
       inputs:
         command: custom
-        customCommand: 'audit fix'
-      displayName: 'audit fix'
-
-    - task: Npm@1
-      inputs:
-        command: custom
         customCommand: 'install pm2@latest -g'
       displayName: 'install pm2'
 
