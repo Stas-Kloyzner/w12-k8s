@@ -23,28 +23,28 @@ stages:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
     
+    - task: Npm@1
+      inputs:
+        command: custom
+        customCommand: 'install -g npm@latest'
+      displayName: 'Upgrade npm to latest version'
+  
+    # - task: Npm@1
+    #   displayName: 'npm install'
+    #   inputs:
+    #     verbose: true
+
     # - task: Npm@1
     #   inputs:
     #     command: custom
-    #     customCommand: 'install -g npm@latest'
-    #   displayName: 'Upgrade npm to latest version'
-  
-    - task: Npm@1
-      displayName: 'npm install'
-      inputs:
-        verbose: true
+    #     customCommand: 'audit fix'
+    #   displayName: 'audit fix'
 
-    - task: Npm@1
-      inputs:
-        command: custom
-        customCommand: 'audit fix'
-      displayName: 'audit fix'
-
-    - task: Npm@1
-      inputs:
-        command: custom
-        customCommand: 'install pm2@latest -g'
-      displayName: 'install pm2'
+    # - task: Npm@1
+    #   inputs:
+    #     command: custom
+    #     customCommand: 'install pm2@latest -g'
+    #   displayName: 'install pm2'
 
     # - task: Npm@1
     #   inputs:
