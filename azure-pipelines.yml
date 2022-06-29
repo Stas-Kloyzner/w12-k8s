@@ -22,9 +22,14 @@ stages:
       inputs:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
+    
+    - task: Npm@1
+      inputs:
+        command: custom
+        customCommand: 'install -g npm@latest'
+      displayName: 'Upgrade npm to latest version'
 
     - script: |
         node -v
-        sudo npm install npm@latest -g
         npm -v
-      displayName: 'update npm to latest'
+      displayName: 'version report'
