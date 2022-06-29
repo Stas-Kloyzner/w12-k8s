@@ -28,9 +28,13 @@ stages:
     #     command: custom
     #     customCommand: 'sudo npm install -g npm@latest'
     #   displayName: 'Upgrade npm to latest version'
+    
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo npm install npm@latest -g'
+    
+    - task: CmdLine@2
+      inputs:
+        script: 'npm -v'
+    
 
-    - script: |
-        sudo npm install -g npm@latest
-        node -v
-        npm -v
-      displayName: 'version report'
