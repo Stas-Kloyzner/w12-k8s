@@ -26,7 +26,7 @@ stages:
     - task: Npm@1
       inputs:
         command: custom
-        customCommand: 'install -g npm@latest'
+        customCommand: 'sudo install -g npm@latest'
       displayName: 'Upgrade npm to latest version'
 
     - script: |
