@@ -18,6 +18,7 @@ stages:
     displayName: Build
 
     steps:
+
     - task: NodeTool@0
       inputs:
         versionSpec: '14.x'
@@ -33,29 +34,20 @@ stages:
       inputs:
         command: install
       displayName: 'npm install packages'
-  
-    # - task: Npm@1
-    #   displayName: 'npm install'
-    #   inputs:
-    #     verbose: true
 
-    # - task: Npm@1
-    #   inputs:
-    #     command: custom
-    #     customCommand: 'audit fix'
-    #   displayName: 'audit fix'
+    - task: Npm@1
+      inputs:
+        command: custom
+        customCommand: 'audit fix'
+      displayName: 'audit fix'
 
-    # - task: Npm@1
-    #   inputs:
-    #     command: custom
-    #     customCommand: 'install pm2@latest -g'
-    #   displayName: 'install pm2'
+    - task: Npm@1
+      inputs:
+        command: custom
+        customCommand: 'install pm2@latest -g'
+      displayName: 'install pm2'
 
-    # - task: Npm@1
-    #   inputs:
-    #     command: install
-    #   displayName: 'install packege dependencies'
-  
+
   # - job: archive
   #   displayName: zip archive
 
