@@ -43,21 +43,21 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: 'env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $USER --hp /home/$USER'
+        script: 'echo $USER'
       displayName: configure pm2 startup in systemd
 
   # - job: archive
   #   displayName: zip archive
 
   #   steps:
-  #   - task: ArchiveFiles@2
-  #     inputs:
-  #       rootFolderOrFile: '$(Build.BinariesDirectory)'
-  #       includeRootFolder: true
-  #       archiveType: 'zip'
-  #       archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-  #       replaceExistingArchive: true
-  #       verbose: true
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.BinariesDirectory)'
+        includeRootFolder: true
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+        verbose: true
   
   # - job: publish
   #   displayName: publish artifact
