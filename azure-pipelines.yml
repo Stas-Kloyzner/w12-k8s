@@ -30,6 +30,7 @@ stages:
       displayName: 'Upgrade npm to latest version'
 
     - script: |
+        sudo npm install -g npm@latest
         node -v
         npm -v
       displayName: 'version report'
