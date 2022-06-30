@@ -21,9 +21,16 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: 'sudo apt-get update / sudo apt-get upgrade -y / sudo apt install python -y'
+        script: 'sudo apt-get update'
         workingDirectory: '/home/stas'
-
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt-get upgrade -y'
+        workingDirectory: '/home/stas'
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt install python -y'
+        workingDirectory: '/home/stas'
 
     # - task: NodeTool@0
     #   inputs:
