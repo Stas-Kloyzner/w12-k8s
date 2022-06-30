@@ -1,3 +1,8 @@
+
+[stage]
+
+20.121.43.38
+
 #[all:vars]
-#ansible_user=stas
-#ansible_pass=st@K24081993
+#ansible_user=stage
+#ansible_pass=ad@M12345678
