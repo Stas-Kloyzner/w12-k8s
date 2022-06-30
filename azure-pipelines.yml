@@ -18,32 +18,32 @@ stages:
     displayName: Build
 
     steps:
-
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get update'
-        workingDirectory: '/home/stas'
+        workingDirectory: '/home/$USER'
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get upgrade -y'
-        workingDirectory: '/home/stas'
+        workingDirectory: '/home/$USER'
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python -y'
-        workingDirectory: '/home/stas'
+        workingDirectory: '/home/$USER'
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python3-pip -y'
-        workingDirectory: '/home/stas'
+        workingDirectory: '/home/$USER'
     - task: CmdLine@2
       inputs:
         script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
-        workingDirectory: '/home/stas'
+        workingDirectory: '/home/$USER'
 
-    # - task: NodeTool@0
-    #   inputs:
-    #     versionSpec: '14.x'
-    #   displayName: 'Install Node.js'
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo npm install -g npm@latest'
+        workingDirectory: '/home/$USER'
+
     
     # - task: Npm@1
     #   inputs:
