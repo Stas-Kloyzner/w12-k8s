@@ -43,7 +43,12 @@ stages:
       inputs:
         script: 'sudo npm install -g npm@latest'
         workingDirectory: '/home/stas'
-
+    
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(agent.builddirectory)'
+        Contents: '**'
+        TargetFolder: '/home/stas/app'
     
     # - task: Npm@1
     #   inputs:
