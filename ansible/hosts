@@ -1,8 +1,7 @@
 
 [stage]
-
 20.121.43.38
 
-#[all:vars]
-#ansible_user=stage
-#ansible_pass=ad@M12345678
+[stage:vars]
+ansible_user=stage
+ansible_pass=ad@M12345678
