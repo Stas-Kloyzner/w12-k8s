@@ -56,6 +56,12 @@ stages:
         Contents: '**'
         TargetFolder: '/home/stas/app'
       displayName: copy work dyrectory to ~/app
+
+    - task: CmdLine@2
+      inputs:
+        script: 'npm install'
+        workingDirectory: '/home/stas/app'
+      displayName: install npm packages
     
     - task: file-creator@6
       inputs:
