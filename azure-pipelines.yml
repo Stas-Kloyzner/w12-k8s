@@ -29,11 +29,39 @@ stages:
         command: custom
         customCommand: 'install -g npm@latest'
       displayName: 'Upgrade npm to latest version'
-
+    - task: file-creator@6
+      inputs:
+        filepath: '.env'
+        filecontent: |
+          # Host configuration
+          PORT=8080
+          HOST=0.0.0.0
+          HOST_URL=http://20.119.75.115:8080
+          COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+          NODE_ENV=development
+          
+          # Okta configuration
+          OKTA_ORG_URL=https://dev-59598263.okta.com
+          OKTA_CLIENT_ID=0oa58me7658dghC7K5d7
+          OKTA_CLIENT_SECRET=yGO-hInM2mbqWBjMiaFq0PVsUdJbwBJeraucqgci
+          
+          # Postgres configuration
+          PGHOST=staging-vnet-pg-f-server.postgres.database.azure.com
+          PGUSERNAME=pgadmin
+          PGDATABASE=postgres
+          PGPASSWORD=p@sSw0rD
+          PGPORT=5432
+        fileoverwrite: true
+        skipempty: true
     - task: Npm@1
       inputs:
         command: install
       displayName: 'npm install packages'
+
+    - task: Npm@1
+      inputs:
+        command: run dev
+      displayName: 'npm run dev'
 
     - task: Npm@1
       inputs:
