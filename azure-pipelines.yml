@@ -97,7 +97,7 @@ stages:
     - task: CmdLine@2
       inputs:
         script: 'ansible-playbook install.yml'
-        workingDirectory: '/home/stas/app'
+        workingDirectory: '/home/stas/app/ansible'
       displayName: 'ansible run playbook'
 
     - task: CmdLine@2
