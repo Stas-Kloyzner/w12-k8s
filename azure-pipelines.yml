@@ -88,23 +88,24 @@ stages:
         fileoverwrite: true
         skipempty: true
   
-    # - task: CmdLine@2
-    #   inputs:
-    #     script: 'sudo apt-get -y install zip'
-    #   displayName: 'install zip'
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt-get -y install zip'
+        workingDirectory: '/home/stas'
+      displayName: 'install zip'
 
-    # - task: ArchiveFiles@2
-    #   inputs:
-    #     rootFolderOrFile: '$(Pipeline.Workspace)/s'
-    #     includeRootFolder: false
-    #     archiveType: 'zip'
-    #     archiveFile: '$(Build.ArtifactStagingDirectory)/wt-app.zip'
-    #     replaceExistingArchive: true
-    #     verbose: true
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '/home/stas/app'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '/home/stas/app/artifact/wt-app.zip'
+        replaceExistingArchive: true
+        verbose: true
   
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '/home/stas/app'
+        PathtoPublish: '/home/stas/app/artifact'
         ArtifactName: 'wt-app'
         publishLocation: 'Container'
     
