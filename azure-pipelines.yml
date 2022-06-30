@@ -35,6 +35,10 @@ stages:
       inputs:
         script: 'sudo apt install python3-pip -y'
         workingDirectory: '/home/stas'
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt install nodejs'
+        workingDirectory: '/home/stas'
 
     # - task: NodeTool@0
     #   inputs:
