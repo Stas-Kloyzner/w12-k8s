@@ -21,28 +21,28 @@ stages:
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get update'
-        workingDirectory: '/home/$USER'
+        workingDirectory: '/home/stas'
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get upgrade -y'
-        workingDirectory: '/home/$USER'
+        workingDirectory: '/home/stas'
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python -y'
-        workingDirectory: '/home/$USER'
+        workingDirectory: '/home/stas'
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python3-pip -y'
-        workingDirectory: '/home/$USER'
+        workingDirectory: '/home/stas'
     - task: CmdLine@2
       inputs:
         script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
-        workingDirectory: '/home/$USER'
+        workingDirectory: '/home/stas'
 
     - task: CmdLine@2
       inputs:
         script: 'sudo npm install -g npm@latest'
-        workingDirectory: '/home/$USER'
+        workingDirectory: '/home/stas'
 
     
     # - task: Npm@1
