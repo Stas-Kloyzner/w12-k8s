@@ -22,63 +22,66 @@ stages:
       inputs:
         script: 'sudo apt-get update'
         workingDirectory: '/home/stas'
+      displayName: update system
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get upgrade -y'
         workingDirectory: '/home/stas'
+      displayName: upgrade system
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python -y'
         workingDirectory: '/home/stas'
+      displayName: instal python
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python3-pip -y'
         workingDirectory: '/home/stas'
+      displayName: install pip
     - task: CmdLine@2
       inputs:
         script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
         workingDirectory: '/home/stas'
+      displayName: install node 14.x
 
     - task: CmdLine@2
       inputs:
         script: 'sudo npm install -g npm@latest'
         workingDirectory: '/home/stas'
+      displayName: upgrade npm to latest
     
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(agent.builddirectory)'
+        SourceFolder: '$(agent.builddirectory)/s'
         Contents: '**'
         TargetFolder: '/home/stas/app'
+      displayName: copy work dyrectory to ~/app
     
-    # - task: Npm@1
-    #   inputs:
-    #     command: custom
-    #     customCommand: 'install -g npm@latest'
-    #   displayName: 'Upgrade npm to latest version'
-    # - task: file-creator@6
-    #   inputs:
-    #     filepath: '.env'
-    #     filecontent: |
-    #       # Host configuration
-    #       PORT=8080
-    #       HOST=0.0.0.0
-    #       HOST_URL=http://20.119.75.115:8080
-    #       COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
-    #       NODE_ENV=development
+    - task: file-creator@6
+      inputs:
+        filepath: '/home/stas/app/.env'
+        filecontent: |
+          # Host configuration
+          PORT=8080
+          HOST=0.0.0.0
+          HOST_URL=http://20.119.75.115:8080
+          COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+          NODE_ENV=development
           
-    #       # Okta configuration
-    #       OKTA_ORG_URL=https://dev-59598263.okta.com
-    #       OKTA_CLIENT_ID=0oa58me7658dghC7K5d7
-    #       OKTA_CLIENT_SECRET=yGO-hInM2mbqWBjMiaFq0PVsUdJbwBJeraucqgci
+          # Okta configuration
+          OKTA_ORG_URL=https://dev-59598263.okta.com
+          OKTA_CLIENT_ID=0oa58me7658dghC7K5d7
+          OKTA_CLIENT_SECRET=yGO-hInM2mbqWBjMiaFq0PVsUdJbwBJeraucqgci
           
-    #       # Postgres configuration
-    #       PGHOST=staging-vnet-pg-f-server.postgres.database.azure.com
-    #       PGUSERNAME=pgadmin
-    #       PGDATABASE=postgres
-    #       PGPASSWORD=p@sSw0rD
-    #       PGPORT=5432
-    #     fileoverwrite: true
-    #     skipempty: true
+          # Postgres configuration
+          PGHOST=staging-vnet-pg-f-server.postgres.database.azure.com
+          PGUSERNAME=pgadmin
+          PGDATABASE=postgres
+          PGPASSWORD=p@sSw0rD
+          PGPORT=5432
+        fileoverwrite: true
+        skipempty: true
+  
     # - task: Npm@1
     #   inputs:
     #     command: install
