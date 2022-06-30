@@ -93,6 +93,11 @@ stages:
         script: 'sudo apt-get -y install ansible'
         workingDirectory: '/home/stas'
       displayName: 'install ansible'
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt-get install -y sshpass'
+        workingDirectory: '/home/stas'
+      displayName: 'install sshpass'
 
     - task: CmdLine@2
       inputs:
