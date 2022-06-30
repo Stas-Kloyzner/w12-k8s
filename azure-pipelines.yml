@@ -18,11 +18,12 @@ stages:
     displayName: Build
 
     steps:
-      - task: Ansible@0
-        inputs:
-          ansibleInterface: 'agentMachine'
-          playbookPathOnAgentMachine: 'ansible/install.yml'
-          inventoriesAgentMachine: 'noInventory'
+
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt-get update / sudo apt-get upgrade -y / sudo apt install python -y'
+        workingDirectory: '/home/stas'
+
 
     # - task: NodeTool@0
     #   inputs:
@@ -77,19 +78,19 @@ stages:
     #     script: 'sudo apt-get -y install zip'
     #   displayName: 'install zip'
 
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: '$(Pipeline.Workspace)/s'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/wt-app.zip'
-        replaceExistingArchive: true
-        verbose: true
+    # - task: ArchiveFiles@2
+    #   inputs:
+    #     rootFolderOrFile: '$(Pipeline.Workspace)/s'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(Build.ArtifactStagingDirectory)/wt-app.zip'
+    #     replaceExistingArchive: true
+    #     verbose: true
   
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'wt-app'
-        publishLocation: 'Container'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #     ArtifactName: 'wt-app'
+    #     publishLocation: 'Container'
     
 
