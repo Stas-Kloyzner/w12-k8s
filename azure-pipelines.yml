@@ -96,10 +96,10 @@ stages:
     #     replaceExistingArchive: true
     #     verbose: true
   
-    # - task: PublishBuildArtifacts@1
-    #   inputs:
-    #     PathtoPublish: '/home/stas/app'
-    #     ArtifactName: 'wt-app'
-    #     publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '/home/stas/app'
+        ArtifactName: 'wt-app'
+        publishLocation: 'Container'
     
 
