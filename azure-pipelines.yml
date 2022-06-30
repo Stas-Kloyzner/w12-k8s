@@ -90,6 +90,18 @@ stages:
   
     - task: CmdLine@2
       inputs:
+        script: 'sudo apt-get -y install ansible'
+        workingDirectory: '/home/stas'
+      displayName: 'install ansible'
+
+    - task: CmdLine@2
+      inputs:
+        script: 'ansible-playbook install.yml'
+        workingDirectory: '/home/stas/app'
+      displayName: 'ansible run playbook'
+
+    - task: CmdLine@2
+      inputs:
         script: 'sudo apt-get -y install zip'
         workingDirectory: '/home/stas'
       displayName: 'install zip'
