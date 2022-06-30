@@ -1,0 +1,67 @@
+--
+- hosts: localhost
+  vars:
+    resource_group: Staging
+    scaleset_name: "{{ resource_group }}-vmss"
+    loadbalancer_name: "{{ resource_group }}-lb"
+    admin_username: stas
+    admin_password: st@K24081993
+  tasks:
+  - include: get-hosts-tasks.yml
+
+- name: run on all hosts
+  hosts: "*"
+  tasks:
+
+    - name: get nodejs PPA
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/setup_14.x
+        dest: ~/nodesource_setup.sh
+
+    - name: add the PPA to the Ubuntu system
+      command: bash nodesource_setup.sh
+      become: yes
+
+    - name: install nodejs
+      command: apt install nodejs
+      become: yes
+
+    - name: update npm to latest
+      command: npm install npm@latest -g
+      become: yes
+
+    - name: clone app git repo into ~/app
+      ansible.builtin.git:
+        repo: https://github.com/Stas-Kloyzner/bootcamp-app.git
+        dest: ~/app
+      ignore_errors: yes
+
+    - name: Install package.json dependencies for the app
+      npm:
+        name: package.json
+        path: ~/app
+
+    - name: run initdb
+      command: npm run initdb
+      args:
+        chdir: ~/app
+
+    - name: install pm2 latest
+      shell: npm install pm2@latest -g
+      become: yes
+
+    - name: pm2 delete all
+      shell: pm2 delete all
+      ignore_errors: yes
+
+    - name: pm2 start npm --name "weight tracker" -- run dev
+      shell: pm2 start npm --name "weight tracker" -- run dev
+      args:
+        chdir: ~/app
+
+    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u stas --hp /home/stas
+      shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u stas --hp /home/stas
+      become: yes
+
+    - name: pm2 save
+      shell: pm2 save --force
