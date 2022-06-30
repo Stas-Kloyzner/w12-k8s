@@ -37,7 +37,7 @@ stages:
         workingDirectory: '/home/stas'
     - task: CmdLine@2
       inputs:
-        script: 'sudo apt install nodejs'
+        script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
         workingDirectory: '/home/stas'
 
     # - task: NodeTool@0
