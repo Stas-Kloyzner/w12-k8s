@@ -67,10 +67,6 @@ stages:
         npm install
       displayName: 'npm install'
 
-    - script: |
-        npm run dev
-      displayName: 'npm run dev'
-
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get -y install zip'
