@@ -1,23 +1,27 @@
-# --
-# - hosts: localhost
-#   vars:
-#     resource_group: "{{rg}}"
-#     scaleset_name: "{{ resource_group }}-vmss"
-#     loadbalancer_name: "{{ resource_group }}-lb"
-#     admin_username: "{{ resource_group }}"
-#     admin_password: "{{pass}}"
-#   tasks:
-#   - include: get-hosts-tasks.yml
+--
+- hosts: localhost
+  vars:
+    resource_group: "{{rg}}"
+    scaleset_name: "{{ resource_group }}-vmss"
+    loadbalancer_name: "{{ resource_group }}-lb"
+    admin_username: "{{ user }}"
+    admin_password: "{{pass}}"
+  tasks:
+  - include: get-hosts-tasks.yml
 
 - name: run on all hosts
   hosts: "stage"
   tasks:
-  
+
+    - name: update system
+      shell: 'apt-get update && apt-get upgrade -y'
+      become: yes
+      
     - name: install unzip
       shell: 'npm install pm2@latest -g '
       become: yes
   
-    - name: install node 14 latest
+    - name: install node 14
       shell: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
       become: yes
       
