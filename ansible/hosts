@@ -1,7 +1,1 @@
 
-[stage]
-20.121.43.38
-
-[stage:vars]
-ansible_user=stage
-ansible_password="ad@M12345678"
