@@ -21,37 +21,37 @@ stages:
     displayName: Build
 
     steps:
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get update'
-        workingDirectory: '/home/stas'
-      displayName: update system
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get upgrade -y'
-        workingDirectory: '/home/stas'
-      displayName: upgrade system
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt install python -y'
-        workingDirectory: '/home/stas'
-      displayName: instal python
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt install python3-pip -y'
-        workingDirectory: '/home/stas'
-      displayName: install pip
-    - task: CmdLine@2
-      inputs:
-        script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
-        workingDirectory: '/home/stas'
-      displayName: install node 14.x
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get update'
+    #     workingDirectory: '/home/stas'
+    #   displayName: update system
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get upgrade -y'
+    #     workingDirectory: '/home/stas'
+    #   displayName: upgrade system
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt install python -y'
+    #     workingDirectory: '/home/stas'
+    #   displayName: instal python
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt install python3-pip -y'
+    #     workingDirectory: '/home/stas'
+    #   displayName: install pip
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
+    #     workingDirectory: '/home/stas'
+    #   displayName: install node 14.x
 
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo npm install -g npm@latest'
-        workingDirectory: '/home/stas'
-      displayName: upgrade npm to latest
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo npm install -g npm@latest'
+    #     workingDirectory: '/home/stas'
+    #   displayName: upgrade npm to latest
     
     # - task: CopyFiles@2
     #   inputs:
@@ -60,11 +60,11 @@ stages:
     #     TargetFolder: '/home/stas/app'
     #   displayName: copy work dyrectory to ~/app
 
-    - task: CmdLine@2
-      inputs:
-        script: 'npm install'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install npm packages
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'npm install'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install npm packages
     - task: CmdLine@2
       inputs:
         script: 
@@ -139,25 +139,25 @@ stages:
     #     workingDirectory: '$(agent.builddirectory)/s/ansible'
     #   displayName: 'ansible run playbook'
 
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get -y install zip'
-        workingDirectory: '/home/stas'
-      displayName: 'install zip'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get -y install zip'
+    #     workingDirectory: '/home/stas'
+    #   displayName: 'install zip'
 
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: '$(agent.builddirectory)/s'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
-        replaceExistingArchive: true
-        verbose: true
+    # - task: ArchiveFiles@2
+    #   inputs:
+    #     rootFolderOrFile: '$(agent.builddirectory)/s'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
+    #     replaceExistingArchive: true
+    #     verbose: true
   
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(agent.builddirectory)/a'
-        ArtifactName: 'wt-app'
-        publishLocation: 'Container'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(agent.builddirectory)/a'
+    #     ArtifactName: 'wt-app'
+    #     publishLocation: 'Container'
     
 
