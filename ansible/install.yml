@@ -1,16 +1,16 @@
---
+---
 - hosts: localhost
   vars:
-    resource_group: "{{rg}}"
-    scaleset_name: "{{ resource_group }}-vmss"
-    loadbalancer_name: "{{ resource_group }}-lb"
+    resource_group: "{{ rg }}"
+    scaleset_name: "{{ rg }}-vmss"
+    loadbalancer_name: "{{ rg }}-lb"
     admin_username: "{{ user }}"
-    admin_password: "{{pass}}"
+    admin_password: "{{ pass }}"
   tasks:
   - include: get-hosts-tasks.yml
 
-- name: run on all hosts
-  hosts: "stage"
+- name: run on resource group
+  hosts: "{{ rg }}"
   tasks:
 
     - name: update system
