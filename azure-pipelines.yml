@@ -50,22 +50,22 @@ stages:
         workingDirectory: '/home/stas'
       displayName: upgrade npm to latest
     
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(agent.builddirectory)/s'
-        Contents: '**'
-        TargetFolder: '/home/stas/app'
-      displayName: copy work dyrectory to ~/app
+    # - task: CopyFiles@2
+    #   inputs:
+    #     SourceFolder: '$(agent.builddirectory)/s'
+    #     Contents: '**'
+    #     TargetFolder: '/home/stas/app'
+    #   displayName: copy work dyrectory to ~/app
 
     - task: CmdLine@2
       inputs:
         script: 'npm install'
-        workingDirectory: '/home/stas/app'
+        workingDirectory: '$(agent.builddirectory)/s'
       displayName: install npm packages
     
     - task: file-creator@6
       inputs:
-        filepath: '/home/stas/app/.env'
+        filepath: '$(agent.builddirectory)/s/.env'
         filecontent: |
           # Host configuration
           PORT=8080
@@ -98,12 +98,21 @@ stages:
         script: 'sudo apt-get install -y sshpass'
         workingDirectory: '/home/stas'
       displayName: 'install sshpass'
-
-    - task: CmdLine@2
+    - task: AzureCLI@2
+      displayName: Azure CLI ansible-playbook
       inputs:
-        script: 'ansible-playbook install.yml'
-        workingDirectory: '/home/stas/app/ansible'
-      displayName: 'ansible run playbook'
+        azureSubscription: azure_pass
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          ansible-playbook install.yml
+        workingDirectory: '$(agent.builddirectory)/s/ansible'
+
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'ansible-playbook install.yml'
+    #     workingDirectory: '$(agent.builddirectory)/s/ansible'
+    #   displayName: 'ansible run playbook'
 
     - task: CmdLine@2
       inputs:
@@ -113,16 +122,16 @@ stages:
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '/home/stas/app'
+        rootFolderOrFile: '$(agent.builddirectory)/s'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '/home/stas/app/artifact/wt-app.zip'
+        archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
         replaceExistingArchive: true
         verbose: true
   
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '/home/stas/app/artifact'
+        PathtoPublish: '$(agent.builddirectory)/a'
         ArtifactName: 'wt-app'
         publishLocation: 'Container'
     
