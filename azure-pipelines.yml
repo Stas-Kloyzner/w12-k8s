@@ -11,6 +11,9 @@ pool:
 
 stages:
 - stage: Build
+  variables:
+  - group: staging_vars
+  - group: okta
   displayName: Build stage
   
   jobs:
@@ -62,51 +65,73 @@ stages:
         script: 'npm install'
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: install npm packages
-    
-    - task: file-creator@6
+    - task: CmdLine@2
       inputs:
-        filepath: '$(agent.builddirectory)/s/.env'
-        filecontent: |
-          # Host configuration
-          PORT=8080
-          HOST=0.0.0.0
-          HOST_URL=http://20.119.75.115:8080
-          COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
-          NODE_ENV=development
+        script: 
           
-          # Okta configuration
-          OKTA_ORG_URL=https://dev-59598263.okta.com
-          OKTA_CLIENT_ID=0oa58me7658dghC7K5d7
-          OKTA_CLIENT_SECRET=yGO-hInM2mbqWBjMiaFq0PVsUdJbwBJeraucqgci
+          IP=curl ifconfig.me && cat > .env << EOF
+
+            PORT=8080
+            HOST=0.0.0.0
+            HOST_URL=http://$IP:8080
+            COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+            NODE_ENV=development
           
-          # Postgres configuration
-          PGHOST=staging-vnet-pg-f-server.postgres.database.azure.com
-          PGUSERNAME=pgadmin
-          PGDATABASE=postgres
-          PGPASSWORD=p@sSw0rD
-          PGPORT=5432
-        fileoverwrite: true
-        skipempty: true
+            OKTA_ORG_URL=$(url)
+            OKTA_CLIENT_ID=$(id)
+            OKTA_CLIENT_SECRET=$(secret)
+          
+            PGHOST=$(rg)-pg-f-server.postgres.database.azure.com
+            PGUSERNAME=$(db_admin)
+            PGDATABASE=postgres
+            PGPASSWORD=$(db_pass)
+            PGPORT=5432
+          EOF
+        workingDirectory: '$(agent.builddirectory)/s'
+    # - task: file-creator@6
+    #   inputs:
+    #     filepath: '$(agent.builddirectory)/s/.env'
+    #     filecontent: |
+    #       # Host configuration
+    #       PORT=8080
+    #       HOST=0.0.0.0
+    #       HOST_URL=http://20.119.75.115:8080
+    #       COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+    #       NODE_ENV=development
+          
+    #       # Okta configuration
+    #       OKTA_ORG_URL=https://dev-59598263.okta.com
+    #       OKTA_CLIENT_ID=0oa58me7658dghC7K5d7
+    #       OKTA_CLIENT_SECRET=yGO-hInM2mbqWBjMiaFq0PVsUdJbwBJeraucqgci
+          
+    #       # Postgres configuration
+    #       PGHOST=staging-vnet-pg-f-server.postgres.database.azure.com
+    #       PGUSERNAME=pgadmin
+    #       PGDATABASE=postgres
+    #       PGPASSWORD=p@sSw0rD
+    #       PGPORT=5432
+    #     fileoverwrite: true
+    #     skipempty: true
   
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get -y install ansible'
-        workingDirectory: '/home/stas'
-      displayName: 'install ansible'
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get install -y sshpass'
-        workingDirectory: '/home/stas'
-      displayName: 'install sshpass'
-    - task: AzureCLI@2
-      displayName: Azure CLI ansible-playbook
-      inputs:
-        azureSubscription: azure_pass
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          ansible-playbook install.yml
-        workingDirectory: '$(agent.builddirectory)/s/ansible'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get -y install ansible'
+    #     workingDirectory: '/home/stas'
+    #   displayName: 'install ansible'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get install -y sshpass'
+    #     workingDirectory: '/home/stas'
+    #   displayName: 'install sshpass'
+    # - task: AzureCLI@2
+    #   displayName: Azure CLI ansible-playbook
+    #   inputs:
+    #     azureSubscription: azure_pass
+    #     scriptType: bash
+    #     scriptLocation: inlineScript
+    #     inlineScript: |
+    #       ansible-playbook install.yml
+    #     workingDirectory: '$(agent.builddirectory)/s/ansible'
 
     # - task: CmdLine@2
     #   inputs:
