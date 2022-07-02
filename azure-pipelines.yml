@@ -9,7 +9,7 @@ stages:
 - stage: Build
   variables:
   - group: staging_vars
-  - group: okta
+  - group: azure_credentials
   displayName: Build stage
   
   jobs:
@@ -19,56 +19,84 @@ stages:
     steps:
     - task: CmdLine@2
       inputs:
-        script: 'sudo apt-get update'
+        script: |
+          sudo apt-get update 
+          sudo apt-get upgrade -y
+          sudo apt update
+          sudo apt install software-properties-common
+          sudo apt-add-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
+          ansible --version
+          sudo apt install python3-pip -y
+          pip install ansible[azure]
+          ansible-galaxy install azure.azure_preview_modules
+          pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
+          sudo apt-get install -y sshpass
+          sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az login --service-principal -u $(client_id) -p $(secret) --tenant $(tenant)
+          ansible-playbook ansible/install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
+
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: update system
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get upgrade -y'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: upgrade system
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt install python3.8'
-
-        workingDirectory: '/home'
-      displayName: install python 3.8
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt install python3-pip -y'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install pip
       
-    - task: CmdLine@2
-      inputs:
-        script: 'pip install ansible[azure]'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install ansible[azure]
+    # - task: file-creator@6
+    #   inputs:
+    #     filepath: '/home/agent/.azure/credentials'
+    #     filecontent: |
+    #       [default]
+    #       subscription_id=$(subscription_id)
+    #       client_id=$(client_id)
+    #       secret=$(secret)
+    #       tenant=$(tenant)
+    #     fileoverwrite: true
 
-    - task: CmdLine@2
-      inputs:
-        script: 'ansible-galaxy install azure.azure_preview_modules'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: ansible-galaxy install azure.azure_preview_modules
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get upgrade -y'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: upgrade system
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt install python3.8'
+
+    #     workingDirectory: '/home'
+    #    displayName: install python 3.8
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt install python3-pip -y'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install pip
       
-    - task: CmdLine@2
-      inputs:
-        script: 'pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
-    - task: CmdLine@2
-      inputs:
-        script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install node 14.x
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'pip install ansible[azure]'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install ansible[azure]
 
-    - task: CmdLine@2
-      inputs:
-        script: |
-         pip3 uninstall PyCrypto /
-         pip3 install -U PyCryptodome
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: upgrade npm to latest
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'ansible-galaxy install azure.azure_preview_modules'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: ansible-galaxy install azure.azure_preview_modules
+      
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install node 14.x
+
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #      pip3 uninstall PyCrypto /
+    #      pip3 install -U PyCryptodome
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: upgrade npm to latest
     
     # - task: CopyFiles@2
     #   inputs:
@@ -77,60 +105,60 @@ stages:
     #     TargetFolder: '/home/stas/app'
     #   displayName: copy work dyrectory to ~/app
 
-    - task: CmdLine@2
-      inputs:
-        script: 'npm install'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install npm packages
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'npm install'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install npm packages
 
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get -y install ansible'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: 'install ansible'
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get install -y sshpass '
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: 'install sshpass'
-    - task: CmdLine@2
-      inputs:
-        script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: 'install az cli'
-    - task: AzureCLI@2
-      displayName: Azure CLI ansible-playbook
-      inputs:
-        azureSubscription: azure_pass
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          ansible-playbook install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
-        workingDirectory: '$(agent.builddirectory)/s/ansible'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get -y install ansible'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: 'install ansible'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get install -y sshpass '
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: 'install sshpass'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: 'install az cli'
+    # - task: AzureCLI@2
+    #   displayName: Azure CLI ansible-playbook
+    #   inputs:
+    #     azureSubscription: azure_pass
+    #     scriptType: bash
+    #     scriptLocation: inlineScript
+    #     inlineScript: |
+    #       ansible-playbook install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
+    #     workingDirectory: '$(agent.builddirectory)/s/ansible'
 
     # - task: CmdLine@2
     #   inputs:
     #     script: 'ansible-playbook install.yml -e rg=$(staging_vars.rg) -e user=$(staging_vars.vmss_admin) -e pass=$(staging_vars.vmss_pass)'
-    #     workingDirectory: '$(agent.builddirectory)/s/ansible'
-    #   displayName: 'ansible run playbook'
+    #      workingDirectory: '$(agent.builddirectory)/s/ansible'
+    #    displayName: 'ansible run playbook'
 
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get -y install zip'
-        workingDirectory: '/home/stas'
-      displayName: 'install zip'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get -y install zip'
+    #     workingDirectory: '/home/stas'
+    #   displayName: 'install zip'
 
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: '$(agent.builddirectory)/s'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
-        replaceExistingArchive: true
-        verbose: true
+    # - task: ArchiveFiles@2
+    #   inputs:
+    #     rootFolderOrFile: '$(agent.builddirectory)/s'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
+    #     replaceExistingArchive: true
+    #     verbose: true
   
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(agent.builddirectory)/a'
-        ArtifactName: 'wt-app'
-        publishLocation: 'Container'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(agent.builddirectory)/a'
+    #     ArtifactName: 'wt-app'
+    #     publishLocation: 'Container'
