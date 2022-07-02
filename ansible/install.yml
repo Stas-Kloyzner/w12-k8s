@@ -1,14 +1,12 @@
 ---
-- hosts: localhost
-  vars:
+- name: run on resource group
+  hosts: "{{ rg }}"
+    vars:
 #     resource_group: "{{ rg }}"
 #     scaleset_name: "{{ rg }}-vmss"
 #     loadbalancer_name: "{{ rg }}-lb"
-    admin_username: "{{ user }}"
-    admin_password: "{{ pass }}"
-
-- name: run on resource group
-  hosts: "{{ rg }}"
+#     ansible_username: "{{ user }}"
+#     ansible_password: "{{ pass }}"
   tasks:
 
     - name: update system
