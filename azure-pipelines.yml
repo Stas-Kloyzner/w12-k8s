@@ -35,7 +35,7 @@ stages:
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get -y install zip'
-        workingDirectory: '/home/stas'
+        workingDirectory: '$(agent.builddirectory)/s'
       displayName: 'install zip'
 
     - task: ArchiveFiles@2
