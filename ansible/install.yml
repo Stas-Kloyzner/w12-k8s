@@ -17,10 +17,6 @@
     - name: update system
       shell: 'apt-get update && apt-get upgrade -y'
       become: yes
-      
-    - name: install unzip
-      shell: 'npm install pm2@latest -g '
-      become: yes
   
     - name: install node 14
       shell: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
@@ -36,9 +32,9 @@
     - name: Copy the .env file from host to remote
       copy: src=./env dest=~/app
       
-    - name: update npm to latest
-      shell: 'npm install npm@latest -g '
-      become: yes
+#     - name: update npm to latest
+#       shell: 'npm install npm@latest -g '
+#       become: yes
       
     - name: install pm2
       shell: 'npm install pm2@latest -g '
