@@ -13,7 +13,7 @@
       
     - name: Creating a file with content
       copy:
-        dest: "~/app/.env"
+        dest: "~/.env"
         content: |
           # Host configuration
           PORT=8080
