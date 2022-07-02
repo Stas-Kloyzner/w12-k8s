@@ -1,17 +1,17 @@
 ---
 - hosts: localhost
-  vars:
-    resource_group: "{{ rg }}"
-    scaleset_name: "{{ rg }}-vmss"
-    loadbalancer_name: "{{ rg }}-lb"
-    admin_username: "{{ user }}"
-    admin_password: "{{ pass }}"
+#   vars:
+#     resource_group: "{{ rg }}"
+#     scaleset_name: "{{ rg }}-vmss"
+#     loadbalancer_name: "{{ rg }}-lb"
+#     admin_username: "{{ user }}"
+#     admin_password: "{{ pass }}"
     
   tasks:
   - include: get-hosts-tasks.yaml
 
 - name: run on resource group
-  hosts: "*"
+  hosts: "{{ rg }}"
   tasks:
 
     - name: update system
@@ -26,6 +26,16 @@
       shell: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
       become: yes
       
+    - name: Creating a file with content
+      copy:
+        dest: "./env"
+        content: |
+          "{{ user }}"
+          "{{ pass }}"
+            
+    - name: Copy the .env file from host to remote
+      copy: src=./env dest=~/app
+      
     - name: update npm to latest
       shell: 'npm install npm@latest -g '
       become: yes
@@ -34,18 +44,18 @@
       shell: 'npm install pm2@latest -g '
       become: yes
 
-#     - name: pm2 delete all
-#       shell: pm2 delete all
-#       ignore_errors: yes
+    - name: pm2 delete all
+      shell: pm2 delete all
+      ignore_errors: yes
 
-#     - name: pm2 start npm --name "weight tracker" -- run dev
-#       shell: pm2 start npm --name "weight tracker" -- run dev
-#       args:
-#         chdir: ~/app
+    - name: pm2 start npm --name "weight tracker" -- run dev
+      shell: pm2 start npm --name "weight tracker" -- run dev
+      args:
+        chdir: ~/app
 
-#     - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u stas --hp /home/stas
-#       shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u stas --hp /home/stas
-#       become: yes
+    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
+      shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
+      become: yes
 
-#     - name: pm2 save
-#       shell: pm2 save --force
+    - name: pm2 save
+      shell: pm2 save --force
