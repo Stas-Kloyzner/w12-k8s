@@ -1,12 +1,8 @@
 ---
 - name: run on resource group
   hosts: "{{ rg }}"
-#     vars:
-#     resource_group: "{{ rg }}"
-#     scaleset_name: "{{ rg }}-vmss"
-#     loadbalancer_name: "{{ rg }}-lb"
-#     ansible_username: "{{ user }}"
-#     ansible_password: "{{ pass }}"
+    vars:
+    ip: "{{ ansible_host }}"
   tasks:
 
     - name: update system
@@ -19,10 +15,26 @@
       
     - name: Creating a file with content
       copy:
-        dest: "./.env"
+        dest: "~/app/.env"
         content: |
-          line 1
-          line 2
+          # Host configuration
+          PORT=8080
+          HOST=0.0.0.0
+          HOST_URL=http://"{{ ip }}":8080
+          COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+          NODE_ENV=development
+          
+          # Okta configuration
+          OKTA_ORG_URL="{{ oip }}"
+          OKTA_CLIENT_ID="{{ oid }}"
+          OKTA_CLIENT_SECRET="{{ ocs }}"
+          
+          # Postgres configuration
+          PGHOST="{{ pgn }}"-pg-f-server.postgres.database.azure.com
+          PGUSERNAME="{{ pgu }}"
+          PGDATABASE=postgres
+          PGPASSWORD="{{ pgp }}"
+          PGPORT=5432
 #     - name: Copy the .env file from host to remote
 #       copy: src=./env dest=~/app
       
