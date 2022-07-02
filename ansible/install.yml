@@ -21,7 +21,7 @@
         dest: ~/
         
     - name: unzip artifact
-      shell: 'unzip wt-app.zip'
+      shell: 'mkdir app && unzip wt-app.zip -d ~/app'
       
     - name: Creating a file with content
       copy:
