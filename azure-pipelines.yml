@@ -20,41 +20,41 @@ stages:
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get update'
-        workingDirectory: '/home/stas'
+        workingDirectory: '$(agent.builddirectory)/s'
       displayName: update system
     - task: CmdLine@2
       inputs:
         script: 'sudo apt-get upgrade -y'
-        workingDirectory: '/home/stas'
+        workingDirectory: '$(agent.builddirectory)/s'
       displayName: upgrade system
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python -y'
-        workingDirectory: '/home/stas'
-      displayName: instal python
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt install python3-pip -y'
-        workingDirectory: '/home/stas'
-      displayName: install pip
+        workingDirectory: '$(agent.builddirectory)/s'
+      displayName: install python
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt install python3-pip -y'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install pip
     - task: CmdLine@2
       inputs:
         script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
-        workingDirectory: '/home/stas'
+        workingDirectory: '$(agent.builddirectory)/s'
       displayName: install node 14.x
 
     - task: CmdLine@2
       inputs:
         script: 'sudo npm install -g npm@latest'
-        workingDirectory: '/home/stas'
+        workingDirectory: '$(agent.builddirectory)/s'
       displayName: upgrade npm to latest
     
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(agent.builddirectory)/s'
-        Contents: '**'
-        TargetFolder: '/home/stas/app'
-      displayName: copy work dyrectory to ~/app
+    # - task: CopyFiles@2
+    #   inputs:
+    #     SourceFolder: '$(agent.builddirectory)/s'
+    #     Contents: '**'
+    #     TargetFolder: '/home/stas/app'
+    #   displayName: copy work dyrectory to ~/app
 
     - task: CmdLine@2
       inputs:
