@@ -1,8 +1,6 @@
 ---
 - name: run on resource group
   hosts: "{{ rg }}"
-    vars:
-      ip: "{{ ansible_host }}"
   tasks:
 
     - name: update system
@@ -20,7 +18,7 @@
           # Host configuration
           PORT=8080
           HOST=0.0.0.0
-          HOST_URL=http://"{{ ip }}":8080
+          HOST_URL=http://"{{ ansible_host }}":8080
           COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
           NODE_ENV=development
           
