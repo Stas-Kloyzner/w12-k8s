@@ -23,7 +23,6 @@
         content: |
           line 1
           line 2
-            
 #     - name: Copy the .env file from host to remote
 #       copy: src=./env dest=~/app
       
