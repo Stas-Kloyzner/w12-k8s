@@ -13,12 +13,12 @@
       
     - name: Ansible copy files from a directory to remote server
       copy:
-        src: "{{ playbook_dir }}/../"
-        dest: ~/app
+        src: "{{ playbook_dir }}/../../_App_CI/wt-app/wt-app.zip"
+        dest: ~/
       
     - name: Creating a file with content
       copy:
-        dest: "~/app/.env"
+        dest: "~/.env"
         content: |
           # Host configuration
           PORT=8080
@@ -50,10 +50,10 @@
       shell: pm2 delete all
       ignore_errors: yes
 
-    - name: pm2 start npm --name "weight tracker" -- run dev
-      shell: pm2 start npm --name "weight tracker" -- run dev
-      args:
-        chdir: ~/app
+#     - name: pm2 start npm --name "weight tracker" -- run dev
+#       shell: pm2 start npm --name "weight tracker" -- run dev
+#       args:
+#         chdir: ~/app
 
 #     - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
 #       shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
