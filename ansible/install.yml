@@ -2,7 +2,7 @@
 - name: run on resource group
   hosts: "{{ rg }}"
     vars:
-    ip: "{{ ansible_host }}"
+      ip: "{{ ansible_host }}"
   tasks:
 
     - name: update system
@@ -42,22 +42,22 @@
 #       shell: 'npm install npm@latest -g '
 #       become: yes
       
-    - name: install pm2
-      shell: 'npm install pm2@latest -g '
-      become: yes
+#     - name: install pm2
+#       shell: 'npm install pm2@latest -g '
+#       become: yes
 
-    - name: pm2 delete all
-      shell: pm2 delete all
-      ignore_errors: yes
+#     - name: pm2 delete all
+#       shell: pm2 delete all
+#       ignore_errors: yes
 
-    - name: pm2 start npm --name "weight tracker" -- run dev
-      shell: pm2 start npm --name "weight tracker" -- run dev
-      args:
-        chdir: ~/app
+#     - name: pm2 start npm --name "weight tracker" -- run dev
+#       shell: pm2 start npm --name "weight tracker" -- run dev
+#       args:
+#         chdir: ~/app
 
-    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
-      shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
-      become: yes
+#     - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
+#       shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
+#       become: yes
 
-    - name: pm2 save
-      shell: pm2 save --force
+#     - name: pm2 save
+#       shell: pm2 save --force
