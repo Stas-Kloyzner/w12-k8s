@@ -6,11 +6,12 @@
     loadbalancer_name: "{{ rg }}-lb"
     admin_username: "{{ user }}"
     admin_password: "{{ pass }}"
+    
   tasks:
   - include: get-hosts-tasks.yaml
 
 - name: run on resource group
-  hosts: "{{ rg }}"
+  hosts: "*"
   tasks:
 
     - name: update system
