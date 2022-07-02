@@ -38,8 +38,7 @@ stages:
           sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
           pip install azure-storage-blob==2.1.0
           az login --service-principal -u $(client_id) -p $(secret) --tenant $(tenant) 
-          # ansible-playbook ansible/install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass) -vvv
-
+          # ansible-playbook ansible/install.yml 
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: update system
     - task: Ansible@0
@@ -48,7 +47,8 @@ stages:
         playbookPathOnAgentMachine: 'ansible/install.yml'
         inventoriesAgentMachine: 'noInventory'
         sudoEnabled: true
-      
+        args: '-e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)'
+    
     # - task: file-creator@6
     #   inputs:
     #     filepath: '/home/agent/.azure/credentials'
