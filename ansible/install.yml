@@ -13,7 +13,7 @@
       
     - name: Ansible copy files from a directory to remote server
       copy:
-        src: ./
+        src: ../
         dest: ~/app
       
     - name: Creating a file with content
@@ -23,7 +23,7 @@
           # Host configuration
           PORT=8080
           HOST=0.0.0.0
-          HOST_URL=http://"{{ hostvars['st-lb1'].ansible_host }}":8080
+          HOST_URL=http://{{ hostvars['st-lb1'].ansible_host }}:8080
           COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
           NODE_ENV=development
           
