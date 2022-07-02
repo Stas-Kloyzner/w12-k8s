@@ -27,7 +27,7 @@ stages:
           sudo apt-add-repository --yes --update ppa:ansible/ansible
           sudo apt-get install ansible -y
           ansible --version
-          # sudo apt install python3-pip -y
+          sudo apt-get install python3-pip -y
           # pip install ansible[azure]
           # ansible-galaxy install azure.azure_preview_modules
           # pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
