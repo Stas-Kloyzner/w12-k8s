@@ -1,11 +1,11 @@
 ---
 - hosts: localhost
-#   vars:
+  vars:
 #     resource_group: "{{ rg }}"
 #     scaleset_name: "{{ rg }}-vmss"
 #     loadbalancer_name: "{{ rg }}-lb"
-#     admin_username: "{{ user }}"
-#     admin_password: "{{ pass }}"
+    admin_username: "{{ user }}"
+    admin_password: "{{ pass }}"
     
   tasks:
   - include: get-hosts-tasks.yaml
