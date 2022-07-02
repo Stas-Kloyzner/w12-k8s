@@ -29,9 +29,13 @@ stages:
       displayName: upgrade system
     - task: CmdLine@2
       inputs:
-        script: 'sudo apt install python -y'
+        script: |
+          sudo apt install software-properties-common /
+          sudo apt update /
+          sudo apt install python3.8
+
         workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install python
+      displayName: install python 3.8
     - task: CmdLine@2
       inputs:
         script: 'sudo apt install python3-pip -y'
