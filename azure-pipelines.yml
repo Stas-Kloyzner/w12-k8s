@@ -22,19 +22,19 @@ stages:
         script: |
           sudo apt-get update 
           sudo apt-get upgrade -y
-          sudo apt update
-          sudo apt install software-properties-common
-          sudo apt-add-repository --yes --update ppa:ansible/ansible
-          sudo apt install ansible
-          ansible --version
-          sudo apt install python3-pip -y
-          pip install ansible[azure]
-          ansible-galaxy install azure.azure_preview_modules
-          pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
-          sudo apt-get install -y sshpass
+          # sudo apt update
+          # sudo apt install software-properties-common
+          # sudo apt-add-repository --yes --update ppa:ansible/ansible
+          # sudo apt install ansible
+          # ansible --version
+          # sudo apt install python3-pip -y
+          # pip install ansible[azure]
+          # ansible-galaxy install azure.azure_preview_modules
+          # pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
+          # sudo apt-get install -y sshpass
           # sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           # az login --service-principal -u $(client_id) -p $(secret) --tenant $(tenant)
-          ansible-playbook ansible/install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
+          # ansible-playbook ansible/install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
 
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: update system
