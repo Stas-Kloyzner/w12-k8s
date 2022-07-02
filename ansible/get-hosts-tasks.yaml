@@ -11,7 +11,7 @@
 
 - name: Add all hosts
   add_host:
-    groups: scalesethosts
+    groups: "{{ resource_group }}"
     hostname: "{{ output_ip_address.publicipaddresses[0].ip_address }}_{{ item.properties.frontendPort }}"
     ansible_host: "{{ output_ip_address.publicipaddresses[0].ip_address }}"
     ansible_port: "{{ item.properties.frontendPort }}"
