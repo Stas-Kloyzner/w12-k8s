@@ -22,7 +22,6 @@ stages:
         script: |
           sudo apt-get update 
           sudo apt-get upgrade -y
-          sudo apt-get update
           sudo apt-get install software-properties-common
           sudo apt-add-repository --yes --update ppa:ansible/ansible
           sudo apt-get install ansible -y
@@ -33,7 +32,7 @@ stages:
           pip install -r ~/.ansible/roles/azure.azure_preview_modules/files/requirements-azure.txt
           sudo apt-get install -y sshpass
           sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          # az login --service-principal -u $(client_id) -p $(secret) --tenant $(tenant)
+          az login --service-principal -u $(client_id) -p $(secret) --tenant $(tenant)
           # ansible-playbook ansible/install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
 
         workingDirectory: '$(agent.builddirectory)/s'
