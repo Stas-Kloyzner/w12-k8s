@@ -1,7 +1,7 @@
 ---
 - name: run on resource group
   hosts: "{{ rg }}"
-    vars:
+#     vars:
 #     resource_group: "{{ rg }}"
 #     scaleset_name: "{{ rg }}-vmss"
 #     loadbalancer_name: "{{ rg }}-lb"
