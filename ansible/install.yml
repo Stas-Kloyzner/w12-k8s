@@ -55,6 +55,12 @@
     - name: install pm2
       shell: 'npm install pm2@latest -g '
       become: yes
+      
+    - name: update npm to latest
+      shell: 'npm run initdb'
+      args:
+        chdir: ~/app
+      become: yes
 
 #     - name: pm2 delete all
 #       shell: pm2 delete all
