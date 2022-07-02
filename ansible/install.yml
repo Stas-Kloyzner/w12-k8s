@@ -16,47 +16,44 @@
         src: "{{ playbook_dir }}/../"
         dest: ~/app
       
-#     - name: Creating a file with content
-#       copy:
-#         dest: "~/app/.env"
-#         content: |
-#           # Host configuration
-#           PORT=8080
-#           HOST=0.0.0.0
-#           HOST_URL=http://{{ hostvars['st-lb1'].ansible_host }}:8080
-#           COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
-#           NODE_ENV=development
+    - name: Creating a file with content
+      copy:
+        dest: "~/app/.env"
+        content: |
+          # Host configuration
+          PORT=8080
+          HOST=0.0.0.0
+          HOST_URL=http://{{ hostvars['st-lb1'].ansible_host }}:8080
+          COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+          NODE_ENV=development
           
-#           # Okta configuration
-#           OKTA_ORG_URL="{{ oip }}"
-#           OKTA_CLIENT_ID="{{ oid }}"
-#           OKTA_CLIENT_SECRET="{{ ocs }}"
+          # Okta configuration
+          OKTA_ORG_URL="{{ oip }}"
+          OKTA_CLIENT_ID="{{ oid }}"
+          OKTA_CLIENT_SECRET="{{ ocs }}"
           
-#           # Postgres configuration
-#           PGHOST="{{ pgn }}"-pg-f-server.postgres.database.azure.com
-#           PGUSERNAME="{{ pgu }}"
-#           PGDATABASE=postgres
-#           PGPASSWORD="{{ pgp }}"
-#           PGPORT=5432
-#     - name: Copy the .env file from host to remote
-#       copy: src=./env dest=~/app
+          # Postgres configuration
+          PGHOST="{{ pgn }}"-pg-f-server.postgres.database.azure.com
+          PGUSERNAME="{{ pgu }}"
+          PGDATABASE=postgres
+          PGPASSWORD="{{ pgp }}"
+          PGPORT=5432
+    - name: update npm to latest
+      shell: 'npm install npm@latest -g '
+      become: yes
       
-#     - name: update npm to latest
-#       shell: 'npm install npm@latest -g '
-#       become: yes
-      
-#     - name: install pm2
-#       shell: 'npm install pm2@latest -g '
-#       become: yes
+    - name: install pm2
+      shell: 'npm install pm2@latest -g '
+      become: yes
 
-#     - name: pm2 delete all
-#       shell: pm2 delete all
-#       ignore_errors: yes
+    - name: pm2 delete all
+      shell: pm2 delete all
+      ignore_errors: yes
 
-#     - name: pm2 start npm --name "weight tracker" -- run dev
-#       shell: pm2 start npm --name "weight tracker" -- run dev
-#       args:
-#         chdir: ~/app
+    - name: pm2 start npm --name "weight tracker" -- run dev
+      shell: pm2 start npm --name "weight tracker" -- run dev
+      args:
+        chdir: ~/app
 
 #     - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
 #       shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
