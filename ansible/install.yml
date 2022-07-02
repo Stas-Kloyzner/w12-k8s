@@ -21,8 +21,7 @@
         dest: ~/
         
     - name: unzip artifact
-      shell: 'unzip wt-app.zip –d ~/app'
-      become: yes
+      shell: 'unzip wt-app.zip'
       
     - name: Creating a file with content
       copy:
