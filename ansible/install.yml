@@ -11,9 +11,14 @@
       shell: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
       become: yes
       
+    - name: Ansible copy files from a directory to remote server
+      copy:
+        src: ./
+        dest: ~/app
+      
     - name: Creating a file with content
       copy:
-        dest: "~/.env"
+        dest: "~/app/.env"
         content: |
           # Host configuration
           PORT=8080
