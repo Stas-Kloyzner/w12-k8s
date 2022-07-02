@@ -32,11 +32,11 @@ stages:
         script: 'sudo apt install python -y'
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: install python
-    # - task: CmdLine@2
-    #   inputs:
-    #     script: 'sudo apt install python3-pip -y'
-    #     workingDirectory: '$(agent.builddirectory)/s'
-    #   displayName: install pip
+    - task: CmdLine@2
+      inputs:
+        script: 'sudo apt install python3-pip -y'
+        workingDirectory: '$(agent.builddirectory)/s'
+      displayName: install pip
     - task: CmdLine@2
       inputs:
         script: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
@@ -69,9 +69,14 @@ stages:
       displayName: 'install ansible'
     - task: CmdLine@2
       inputs:
-        script: 'sudo apt-get install -y sshpass'
+        script: 'sudo apt-get install -y sshpass '
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: 'install sshpass'
+    - task: CmdLine@2
+      inputs:
+        script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
+        workingDirectory: '$(agent.builddirectory)/s'
+      displayName: 'install az cli'
     - task: AzureCLI@2
       displayName: Azure CLI ansible-playbook
       inputs:
