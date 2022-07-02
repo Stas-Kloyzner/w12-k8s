@@ -36,7 +36,7 @@ stages:
           ansible-galaxy collection install azure.azcollection --force
           sudo apt-get install -y sshpass 
           sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
-          pip install azure-core 
+          pip install azure-storage-blob==2.1.0
           az login --service-principal -u $(client_id) -p $(secret) --tenant $(tenant) 
           ansible-playbook ansible/install.yml -e rg=$(rg) -e user=$(vmss_admin) -e pass=$(vmss_pass)
 
