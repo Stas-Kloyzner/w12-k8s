@@ -64,7 +64,9 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: 'sudo npm install -g npm@latest'
+        script: |
+         pip3 uninstall PyCrypto /
+         pip3 install -U PyCryptodome
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: upgrade npm to latest
     
