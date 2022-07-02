@@ -19,13 +19,13 @@
       
     - name: Creating a file with content
       copy:
-        dest: "./env"
+        dest: "./.env"
         content: |
-          "{{ user }}"
-          "{{ pass }}"
+          line 1
+          line 2
             
-    - name: Copy the .env file from host to remote
-      copy: src=./env dest=~/app
+#     - name: Copy the .env file from host to remote
+#       copy: src=./env dest=~/app
       
 #     - name: update npm to latest
 #       shell: 'npm install npm@latest -g '
