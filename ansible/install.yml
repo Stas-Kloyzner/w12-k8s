@@ -8,22 +8,27 @@
     - name: update system
       shell: 'apt-get update && apt-get upgrade -y'
       become: yes
+      ignore_unreachable: true
   
     - name: install node 14
       shell: 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs'
       become: yes
+      ignore_unreachable: true
       
     - name: install unzip
       shell: 'sudo apt-get install unzip'
       become: yes
+      ignore_unreachable: true
       
     - name:  copy artifact to remote
       copy:
         src: "{{ playbook_dir }}/../../_App_CI/wt-app/wt-app.zip"
         dest: ~/
+      ignore_unreachable: true
         
     - name: unzip artifact
       shell: 'mkdir app && unzip wt-app.zip -d ~/app'
+      ignore_unreachable: true
       
     - name: Creating a file with content
       copy:
@@ -47,33 +52,37 @@
           PGDATABASE=postgres
           PGPASSWORD={{ pgp }}
           PGPORT=5432
+        ignore_unreachable: true
 
     - name: update npm to latest
       shell: 'npm install npm@latest -g '
       become: yes
+      ignore_unreachable: true
       
     - name: install pm2
       shell: 'npm install pm2@latest -g '
       become: yes
+      ignore_unreachable: true
       
     - name: update npm to latest
       shell: 'npm run initdb'
       args:
         chdir: ~/app
       become: yes
+      ignore_unreachable: true
 
-#     - name: pm2 delete all
-#       shell: pm2 delete all
-#       ignore_errors: yes
+    - name: pm2 delete all
+      shell: pm2 delete all
+      ignore_errors: yes
 
-#     - name: pm2 start npm --name "weight tracker" -- run dev
-#       shell: pm2 start npm --name "weight tracker" -- run dev
-#       args:
-#         chdir: ~/app
+    - name: pm2 start npm --name "weight tracker" -- run dev
+      shell: pm2 start npm --name "weight tracker" -- run dev
+      args:
+        chdir: ~/app
 
-#     - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
-#       shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ user }}" --hp /home/"{{ user }}"
-#       become: yes
+    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ ansible_user }}" --hp /home/"{{ ansible_user }}"
+      shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ ansible_user }}" --hp /home/"{{ ansible_user }}"
+      become: yes
 
-#     - name: pm2 save
-#       shell: pm2 save --force
+    - name: pm2 save
+      shell: pm2 save --force
