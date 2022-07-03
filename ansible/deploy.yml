@@ -63,7 +63,7 @@
           PGPORT=5432
 
     - name: fix npm symlink (broken after copying)
-      shell: 'ln -s ./node_modules/nodemon/bin/nodemon.js ./node_modules/.bin/nodemon'
+      shell: 'ln -sf ./node_modules/nodemon/bin/nodemon.js ./node_modules/.bin/nodemon'
       args:
         chdir: /home/{{ ansible_user }}/app
       ignore_unreachable: true
