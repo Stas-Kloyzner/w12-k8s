@@ -27,7 +27,11 @@
       ignore_unreachable: true
         
     - name: unzip artifact
-      shell: 'mkdir app && unzip wt-app.zip -d ~/app'
+      shell: 'sudo rm -r app && mkdir app && unzip wt-app.zip -d ~/app && rm wt-app.zip'
+      ignore_unreachable: true
+      
+    - name: unzip artifact
+      shell: 'chmod -R 777 app'
       ignore_unreachable: true
       
     - name: Creating a file with content
@@ -64,7 +68,7 @@
       become: yes
       ignore_unreachable: true
       
-    - name: update npm to latest
+    - name: npm run initdb
       shell: 'npm run initdb'
       args:
         chdir: ~/app
