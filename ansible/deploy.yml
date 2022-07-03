@@ -67,6 +67,7 @@
       args:
         chdir: /home/{{ ansible_user }}/app
       ignore_unreachable: true
+      ignore_errors: yes
       
     - name: install pm2
       shell: 'npm install pm2@latest -g '
