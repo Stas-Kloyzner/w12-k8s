@@ -18,25 +18,31 @@ stages:
       inputs:
         script: |
           sudo apt-get update && sudo apt-get upgrade -y 
+          curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
+          npm install npm@latest -g
+          npm install
+          npm audit fix
+          sudo apt-get -y install zip
+
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: update system
 
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '14.x'
-      displayName: install node 14
+    # - task: NodeTool@0
+    #   inputs:
+    #     versionSpec: '14.x'
+    #   displayName: install node 14
 
-    - task: CmdLine@2
-      inputs:
-        script: 'npm install nodemon --save-dev && npm install'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install npm packages
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'npm install nodemon --save-dev && npm install'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install npm packages
 
-    - task: CmdLine@2
-      inputs:
-        script: 'sudo apt-get -y install zip'
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: 'install zip'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: 'sudo apt-get -y install zip'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: 'install zip'
 
     - task: ArchiveFiles@2
       inputs:
