@@ -23,24 +23,7 @@ stages:
           sudo apt-get -y install zip
 
         workingDirectory: '$(agent.builddirectory)/s'
-      displayName: update system
-
-    # - task: NodeTool@0
-    #   inputs:
-    #     versionSpec: '14.x'
-    #   displayName: install node 14
-
-    # - task: CmdLine@2
-    #   inputs:
-    #     script: 'npm install nodemon --save-dev && npm install'
-    #     workingDirectory: '$(agent.builddirectory)/s'
-    #   displayName: install npm packages
-
-    # - task: CmdLine@2
-    #   inputs:
-    #     script: 'sudo apt-get -y install zip'
-    #     workingDirectory: '$(agent.builddirectory)/s'
-    #   displayName: 'install zip'
+      displayName: install prerequisites and node packages
 
     - task: ArchiveFiles@2
       inputs:
