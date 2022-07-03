@@ -1,15 +1,15 @@
 [staging]
 st-lb1 ansible_host=20.231.124.22         ansible_port=22     
-st-lb2 ansible_host=20.231.124.22         ansible_port=23
+#st-lb2 ansible_host=20.231.124.22         ansible_port=23
 st-lb3 ansible_host=20.231.124.22         ansible_port=24
-st-lb4 ansible_host=20.231.124.22         ansible_port=25
-st-lb5 ansible_host=20.231.124.22         ansible_port=26
-st-lb6 ansible_host=20.231.124.22         ansible_port=27
-st-lb7 ansible_host=20.231.124.22         ansible_port=28
-st-lb8 ansible_host=20.231.124.22         ansible_port=29
-st-lb9 ansible_host=20.231.124.22         ansible_port=30
-st-lb10 ansible_host=20.231.124.22         ansible_port=31
-st-lb11 ansible_host=20.231.124.22         ansible_port=32
+#st-lb4 ansible_host=20.231.124.22         ansible_port=25
+#st-lb5 ansible_host=20.231.124.22         ansible_port=26
+#st-lb6 ansible_host=20.231.124.22         ansible_port=27
+#st-lb7 ansible_host=20.231.124.22         ansible_port=28
+#st-lb8 ansible_host=20.231.124.22         ansible_port=29
+#st-lb9 ansible_host=20.231.124.22         ansible_port=30
+#st-lb10 ansible_host=20.231.124.22         ansible_port=31
+#st-lb11 ansible_host=20.231.124.22         ansible_port=32
 
 [production]
 prod-lb1 ansible_host=20.228.133.162         ansible_port=22     
