@@ -30,9 +30,9 @@
       shell: 'sudo rm -r app && mkdir app && unzip wt-app.zip -d ~/app && rm wt-app.zip'
       ignore_unreachable: true
       
-    - name: unzip artifact
-      shell: 'chmod -R 777 app'
-      ignore_unreachable: true
+#     - name: unzip artifact
+#       shell: 'chmod -R 777 app'
+#       ignore_unreachable: true
       
     - name: Creating a file with content
       copy:
@@ -73,16 +73,16 @@
       become: yes
       ignore_unreachable: true
 
-    - name: pm2 delete all
+    - name: clear all previous pm2 tasks
       shell: 'pm2 delete all'
       ignore_errors: yes
 
-    - name: pm2 start npm --name "weight tracker" -- run dev
+    - name: deploy app as service with pm 2
       shell: 'pm2 start npm --name "weight tracker" -- run dev'
       args:
         chdir: /home/{{ ansible_user }}/app
 
-    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
+    - name: configure pm2 to run on startup
       shell: 'env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}'
       become: yes
 
