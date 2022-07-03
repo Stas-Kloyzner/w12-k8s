@@ -29,11 +29,11 @@
     - name: clear app directory if present from previous deployment
       shell: 'sudo rm -r app '
       ignore_unreachable: true
+      ignore_errors: yes
       
     - name: unzip artifact
       shell: 'mkdir app && unzip wt-app.zip -d ~/app && rm wt-app.zip'
       ignore_unreachable: true
-      ignore_errors: yes
       
 #     - name: ghrant access to app
 #       shell: 'chmod -R 777 app'
