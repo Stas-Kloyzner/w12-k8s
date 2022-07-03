@@ -28,7 +28,7 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: 'npm install'
+        script: 'npm install nodemon --save-dev && npm install'
         workingDirectory: '$(agent.builddirectory)/s'
       displayName: install npm packages
 
