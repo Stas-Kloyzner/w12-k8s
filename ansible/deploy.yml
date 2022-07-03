@@ -15,6 +15,16 @@
       become: yes
       ignore_unreachable: true
       
+    - name: install npm latest
+      shell: 'npm install npm@latest -g '
+      become: yes
+      ignore_unreachable: true
+      
+    - name: install npm nodemon
+      shell: 'sudo npm install nodemon -g '
+      become: yes
+      ignore_unreachable: true  
+      
     - name: install unzip
       shell: 'sudo apt-get install unzip'
       become: yes
