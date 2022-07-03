@@ -56,6 +56,7 @@
           PGDATABASE=postgres
           PGPASSWORD={{ pgp }}
           PGPORT=5432
+        become: yes
         ignore_unreachable: true
 
     - name: update npm to latest
@@ -84,8 +85,8 @@
       args:
         chdir: ~/app
 
-    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ ansible_user }}" --hp /home/"{{ ansible_user }}"
-      shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u "{{ ansible_user }}" --hp /home/"{{ ansible_user }}"
+    - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
+      shell: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
       become: yes
 
     - name: pm2 save
