@@ -61,9 +61,9 @@
           PGDATABASE=postgres
           PGPASSWORD={{ pgp }}
           PGPORT=5432
-    - name: update npm to latest
-      shell: 'npm install npm@latest -g '
-      become: yes
+
+    - name: fix npm symlink (broken after copying)
+      shell: 'ln -s ./node_modules/nodemon/bin/nodemon.js ./node_modules/.bin/nodemon'
       ignore_unreachable: true
       
     - name: install pm2
