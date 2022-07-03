@@ -56,10 +56,10 @@
           PGDATABASE=postgres
           PGPASSWORD={{ pgp }}
           PGPORT=5432
-    - name: update npm to latest
-      shell: 'npm install npm@latest -g '
-      become: yes
-      ignore_unreachable: true
+#     - name: update npm to latest
+#       shell: 'npm install npm@latest -g '
+#       become: yes
+#       ignore_unreachable: true
       
     - name: install pm2
       shell: 'npm install pm2@latest -g '
