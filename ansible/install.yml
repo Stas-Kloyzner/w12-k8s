@@ -69,7 +69,7 @@
     - name: npm run initdb
       shell: 'npm run initdb'
       args:
-        chdir: ~/app
+        chdir: /home/{{ ansible_user }}/app
       become: yes
       ignore_unreachable: true
 
@@ -80,7 +80,7 @@
     - name: pm2 start npm --name "weight tracker" -- run dev
       shell: 'pm2 start npm --name "weight tracker" -- run dev'
       args:
-        chdir: ~/app
+        chdir: /home/{{ ansible_user }}/app
 
     - name: sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
       shell: 'env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}'
