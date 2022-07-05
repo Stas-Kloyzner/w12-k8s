@@ -1,0 +1,23 @@
+FROM ubuntu:20.04
+
+RUN apt-get update
+
+Run apt-get upgrade -y
+
+RUN apt-get install sudo
+
+RUN sudo apt install curl -y
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
+
+RUN npm install npm@latest -g
+
+WORKDIR ~/app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 8080
+
+CMD npm run dev
