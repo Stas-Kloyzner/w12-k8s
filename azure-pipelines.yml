@@ -14,29 +14,38 @@ stages:
     displayName: Build
 
     steps:
-    - task: CmdLine@2
+    - task: DockerInstaller@0
       inputs:
-        script: |
-          sudo apt-get update && sudo apt-get upgrade -y 
-          sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
-          sudo npm install npm@latest
-          npm install
-          sudo apt-get -y install zip
-
-        workingDirectory: '$(agent.builddirectory)/s'
-      displayName: install prerequisites and node packages
-
-    - task: ArchiveFiles@2
+        dockerVersion: '17.09.0-ce'
+    - task: Docker@2
       inputs:
-        rootFolderOrFile: '$(agent.builddirectory)/s'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
-        replaceExistingArchive: true
-        verbose: true
+        containerRegistry: 'ACR'
+        repository: 'w8-docker'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       sudo apt-get update && sudo apt-get upgrade -y 
+    #       sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
+    #       sudo npm install npm@latest
+    #       npm install
+    #       sudo apt-get -y install zip
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(agent.builddirectory)/a'
-        ArtifactName: 'wt-app'
-        publishLocation: 'Container'
+    #     workingDirectory: '$(agent.builddirectory)/s'
+    #   displayName: install prerequisites and node packages
+
+    # - task: ArchiveFiles@2
+    #   inputs:
+    #     rootFolderOrFile: '$(agent.builddirectory)/s'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
+    #     replaceExistingArchive: true
+    #     verbose: true
+
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(agent.builddirectory)/a'
+    #     ArtifactName: 'wt-app'
+    #     publishLocation: 'Container'
