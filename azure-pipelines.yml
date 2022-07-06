@@ -87,16 +87,13 @@ stages:
              
             - task: DownloadSecureFile@1
               name: create_env
-              displayName: 'Download create_env.sh'
+              displayName: 'Download create_env.sh ,create .env ,push .env into container'
               inputs:
                 secureFile: 'create_env.sh'
 
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
-            # - task: CmdLine@2
-            #   inputs:
-            #     script: './create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)'
-            #   displayName: create .env
+
 
 
 
