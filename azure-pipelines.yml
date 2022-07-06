@@ -95,7 +95,7 @@ stages:
 
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
-                 docker kill $(docker ps -q)
+                 c=$(docker ps -q) && [[ $c ]] && docker kill $c
                  docker rm $(docker ps -q)
                  docker run --name wt_app -d -p 8080:8080 stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)
                  docker cp ./.env wt_app:app
