@@ -7,9 +7,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# variables:
-#   YOURVARKEYS: YOURVARVALUES
-#   ...
+variables:
+  dockerRegistryServiceConnection: 'ACR'
+  imageRepository: 'staskloydocker'
+  containerRegistry: 'staskloydocker.azurecr.io'
+  dockerfilePath: '$(Build.SourceDirectory)/Dockerfile'
+  tag: '$(Build.BuildNumber)'
 
 stages:
 
