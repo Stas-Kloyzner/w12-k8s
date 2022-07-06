@@ -8,7 +8,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  dockerRegistryServiceConnection: 'ACR'
+  dockerRegistryServiceConnection: 'stas_acr_service'
   imageRepository: 'staskloydocker'
   containerRegistry: 'staskloydocker.azurecr.io'
   dockerfilePath: '$(Build.SourceDirectory)/Dockerfile'
