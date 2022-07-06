@@ -93,6 +93,8 @@ stages:
 
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                 docker create --name wt_app $(tag)
+                 docker cp ./.env wt_app:~/app
 
 
 
