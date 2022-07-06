@@ -46,30 +46,59 @@ stages:
               tags: $(tag)
 
 
-  - stage: Deploy_To_Staging
+  # - stage: Deploy_To_Staging
+  #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  #   jobs:
+  #     - job: Deploy_To_Staging
+  #       workspace:
+  #         clean: all
+  #       steps:
+  #             - task: Docker@2
+  #               inputs:
+  #                 containerRegistry: 'demo-acr'
+  #                 command: 'start'
+  #                 container: '$(tag)'
+
+
+# Continuous Deployment Process for Staging Environment
+  - stage: DeployToStaging
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
-      - job: Deploy_To_Staging
-        workspace:
-          clean: all
-        steps:
-              - task: Docker@2
-                inputs:
-                  containerRegistry: 'demo-acr'
-                  command: 'start'
-                  container: '$(tag)'
+    - deployment: staging
+      displayName: Deploy to Staging
+      environment:
+        name: <<YOUR ENVIRONMENT NAME>>
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: Docker@1
+              displayName: "docker pull from ACR"
+              inputs:
+                azureSubscriptionEndpoint: '<service connection>'
+                azureContainerRegistry: <your ACR name>.azurecr.io
+                command: pull
+                arguments: '<your ACR name>.azurecr.io/<path to your image>:<version>'
+
+
+
+
+
+
+
           
 # Continuous Delivery Process for Production Environment
-  - stage: DeployToProduction
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-    jobs:
-      - job: manual_approval
-        displayName: "Manual Approval"
-        pool: server
-        steps:
-          - task: ManualValidation@0
-            inputs:
-              notifyUsers: 'w4p-a@outlook.com'
+  # - stage: DeployToProduction
+  #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  #   jobs:
+  #     - job: manual_approval
+  #       displayName: "Manual Approval"
+  #       pool: server
+  #       steps:
+  #         - task: ManualValidation@0
+  #           inputs:
+  #             notifyUsers: 'w4p-a@outlook.com'
 #   - deployment: production
 #     displayName: Deploy to Production
 #     environment:
