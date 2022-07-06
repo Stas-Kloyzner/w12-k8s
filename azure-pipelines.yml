@@ -84,7 +84,15 @@ stages:
                 azureContainerRegistry: stasprivateacr.azurecr.io
                 command: pull
                 arguments: 'stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)'
-            
+             
+            - task: DownloadSecureFile@1
+              name: create_env
+              displayName: 'Download create_env.sh'
+              inputs:
+                secureFile: 'create_env.sh'
+
+            # - script: |
+                #  echo Installing $(caCertificate.secureFilePath) to the trusted CA directory...
             - task: CmdLine@2
               inputs:
                 script: './create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)'
