@@ -16,20 +16,20 @@ variables:
   tag: $(Build.BuildNumber)
 
 stages:
-  - stage: Prerequisites
-    jobs:
-      - job: install_prerequisites
-        workspace:
-          clean: all
-        steps:
-        - script: |
-           sudo apt update
-           sudo apt install software-properties-common
-           sudo apt-add-repository --yes --update ppa:ansible/ansible
-           sudo apt install ansible -y
-           ansible --version
-           sudo apt-get install sshpass
-    displayName: 'install ansible'
+#   - stage: Prerequisites
+#     jobs:
+#       - job: install_prerequisites
+#         workspace:
+#           clean: all
+#         steps:
+#         - script: |
+#            sudo apt update
+#            sudo apt install software-properties-common
+#            sudo apt-add-repository --yes --update ppa:ansible/ansible
+#            sudo apt install ansible -y
+#            ansible --version
+#            sudo apt-get install sshpass
+#     displayName: 'install ansible'
 
   - stage: CI
     jobs:
@@ -65,6 +65,9 @@ stages:
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
     - deployment: staging
+      variables:
+      - group: staging_vars
+      - group: azure_credentials
       displayName: Deploy to Staging
       environment:
         name: staging
@@ -81,8 +84,11 @@ stages:
                 azureContainerRegistry: stasprivateacr.azurecr.io
                 command: pull
                 arguments: 'stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)'
-
-
+            
+            - task: CmdLine@2
+              inputs:
+                script: './create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)'
+              displayName: create .env
 
 
 
@@ -101,6 +107,9 @@ stages:
   #           inputs:
   #             notifyUsers: 'w4p-a@outlook.com'
 #   - deployment: production
+    # variables:
+    # - group: staging_vars
+    # - group: azure_credentials
 #     displayName: Deploy to Production
 #     environment:
 #       name: <<YOUR ENVIRONMENT NAME>>
