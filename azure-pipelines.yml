@@ -51,12 +51,12 @@ pool:
 # pool: 
 #   name: w7pool
 
-# variables:
-#   dockerRegistryServiceConnection: stas_acr_service
-#   imageRepository: w8repo
-#   containerRegistry: staskloydocker.azurecr.io
-#   dockerfilePath: Dockerfile
-#   tag: $(Build.BuildNumber)
+variables:
+  dockerRegistryServiceConnection: stas_acr_service
+  imageRepository: w8repo
+  containerRegistry: staskloydocker.azurecr.io
+  dockerfilePath: Dockerfile
+  tag: $(Build.BuildNumber)
 
 stages:
   - stage: CI
