@@ -77,7 +77,7 @@ stages:
             - task: Docker@1
               displayName: "docker pull from ACR"
               inputs:
-                azureSubscriptionEndpoint: 'demo-acr'
+                azureSubscriptionEndpoint: 'azure_pass'
                 azureContainerRegistry: stasprivateacr.azurecr.io
                 command: pull
                 arguments: 'stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)'
