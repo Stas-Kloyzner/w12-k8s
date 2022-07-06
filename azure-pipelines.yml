@@ -19,7 +19,7 @@ stages:
           - task: CmdLine@2
             inputs:
               script: |
-                 sudo docker build -t wt_app:1.0.0 .
+                 docker build -t wt_app:1.0.0 .
             displayName: install docker
           # - task: Docker@2
           #   inputs:
