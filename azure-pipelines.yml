@@ -1,14 +1,17 @@
 # name: <<YOUR PIPELINE NAME CONFIG>>
 trigger:
-  - master
-  # - feature/*
-pool: w7pool
+- master
+- feature/*
+pool: 
+  name: w7pool
+
 variables:
   dockerRegistryServiceConnection: stas_acr_service
   imageRepository: w8repo
   containerRegistry: staskloydocker.azurecr.io
   dockerfilePath: Dockerfile
   tag: $(Build.BuildNumber)
+
 stages:
   - stage: CI
     jobs:
