@@ -9,7 +9,7 @@ pool:
 
 variables:
   dockerRegistryServiceConnection: 'stas_acr_service'
-  imageRepository: 'staskloydocker'
+  imageRepository: 'w8_repo'
   containerRegistry: 'staskloydocker.azurecr.io'
   dockerfilePath: '$(Build.SourceDirectory)/Dockerfile'
   tag: '$(Build.BuildNumber)'
