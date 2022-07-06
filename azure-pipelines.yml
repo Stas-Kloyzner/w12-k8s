@@ -30,7 +30,9 @@ stages:
               Dockerfile: $(dockerfilePath)
               tags: $(tag)
 
-
+- task: ManualValidation@0
+  inputs:
+    notifyUsers: 'w4p-a@outlook.com'
 # Continuous Deployment Process for Staging Environment
   - stage: DeployToStaging
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
@@ -38,16 +40,14 @@ stages:
     - job: waitForValidation
       displayName: Wait for external validation
       pool: w7pool
-      timeoutInMinutes: 4320 # job times out in 3 days
+      # timeoutInMinutes: 4320 # job times out in 3 days
       steps:
       - task: ManualValidation@0
-        timeoutInMinutes: 1440 # task times out in 1 day
         inputs:
-          notifyUsers: |
-            w4p-a@outlook.com
+          notifyUsers: 'w4p-a@outlook.com'
             
-          instructions: 'Please validate the build configuration and resume'
-          onTimeout: 'resume'
+          # instructions: 'Please validate the build configuration and resume'
+          # onTimeout: 'resume'
       
     
 #   - deployment: staging
