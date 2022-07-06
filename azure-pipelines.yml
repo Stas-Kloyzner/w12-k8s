@@ -1,34 +1,30 @@
 # name: <<YOUR PIPELINE NAME CONFIG>>
 
 trigger:
-- master
-- feature/*
-
+  - master
+  - feature/*
 pool: w7pool
-
 variables:
-  dockerRegistryServiceConnection: 'stas_acr_service'
-  imageRepository: 'w8repo'
-  containerRegistry: 'staskloydocker.azurecr.io'
-  dockerfilePath: '$(Build.SourceDirectory)/Dockerfile'
-  tag: '$(Build.BuildNumber)'
-
+  dockerRegistryServiceConnection: stas_acr_service
+  imageRepository: w8repo
+  containerRegistry: staskloydocker.azurecr.io
+  dockerfilePath: $(Build.SourceDirectory)/Dockerfile
+  tag: $(Build.BuildNumber)
 stages:
+  - stage: CI
+    jobs:
+      - job: install_prerequisites
+        workspace:
+          clean: all
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(imageRepository)
+              command: buildAndPush
+              Dockerfile: $(dockerfilePath)
+              tags: $(tag)
 
-# Continuous Integration Process
-- stage: CI
-  jobs:
-  - job: install_prerequisites
-    workspace: 
-      clean: all
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository)
-        command: 'buildAndPush'
-        Dockerfile: $(dockerfilePath)
-        tags: $(tag)
     # - task: CmdLine@2
     #   inputs:
     #     script: |
