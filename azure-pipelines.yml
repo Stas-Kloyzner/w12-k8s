@@ -34,15 +34,26 @@ stages:
   - stage: DeployToStaging
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
-    # - deployment: staging
-    #   displayName: Deploy to Staging
-    #   environment:
-    #     name: staging
-    #     resourceType: VirtualMachine
-    #   strategy:
-    #     runOnce:
-    #       deploy:
-      
+  
+    - deployment: staging
+      displayName: Deploy to Staging
+      environment:
+        name: <<YOUR ENVIRONMENT NAME>>
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: Docker@2
+                inputs:
+                  containerRegistry: 'demo-acr'
+                  command: 'start'
+                  container: '$(tag)'
+          
+# Continuous Delivery Process for Production Environment
+  - stage: DeployToProduction
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    jobs:
       - job: manual_approval
         displayName: "Manual Approval"
         pool: server
@@ -50,23 +61,6 @@ stages:
           - task: ManualValidation@0
             inputs:
               notifyUsers: 'w4p-a@outlook.com'
-      
-    
-#   - deployment: staging
-#     displayName: Deploy to Staging
-#     environment:
-#       name: <<YOUR ENVIRONMENT NAME>>
-#       resourceType: VirtualMachine
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - <<YOUR TASKS>>
-          
-# Continuous Delivery Process for Production Environment
-# - stage: DeployToProduction
-#   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-#   jobs:
 #   - deployment: production
 #     displayName: Deploy to Production
 #     environment:
