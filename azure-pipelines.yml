@@ -9,7 +9,7 @@ pool:
   name: w7pool
 
 variables:
-  dockerRegistryServiceConnection: stas_p_acr
+  dockerRegistryServiceConnection: demo-acr
   imageRepository: w8-private-acr-repo
   containerRegistry: stasprivateacr.azurecr.io
   dockerfilePath: Dockerfile
