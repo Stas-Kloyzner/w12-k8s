@@ -1,4 +1,8 @@
+# set base image
 FROM ubuntu:20.04
+
+# set label
+LABEL maintainer="stas.kloy"
 
 RUN apt-get update
 
