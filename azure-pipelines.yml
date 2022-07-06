@@ -1,4 +1,4 @@
-name: <<YOUR PIPELINE NAME CONFIG>>
+# name: <<YOUR PIPELINE NAME CONFIG>>
 
 trigger:
 - master
