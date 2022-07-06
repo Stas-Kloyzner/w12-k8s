@@ -108,7 +108,7 @@ stages:
   #             notifyUsers: 'w4p-a@outlook.com'
 #   - deployment: production
     # variables:
-    # - group: staging_vars
+    # - group: production_vars
     # - group: azure_credentials
 #     displayName: Deploy to Production
 #     environment:
