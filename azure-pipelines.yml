@@ -22,18 +22,18 @@ stages:
         workspace:
           clean: all
         steps:
-          - task: CmdLine@2
-            inputs:
-              script: |
-                 docker build -t wt_app:1.0.0 .
-            displayName: install docker
-          # - task: Docker@2
+          # - task: CmdLine@2
           #   inputs:
-          #     containerRegistry: $(dockerRegistryServiceConnection)
-          #     repository: $(imageRepository)
-          #     command: buildAndPush
-          #     Dockerfile: $(dockerfilePath)
-          #     tags: $(tag)
+          #     script: |
+          #        docker build -t wt_app:1.0.0 .
+          #   displayName: install docker
+          - task: Docker@2
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(imageRepository)
+              command: buildAndPush
+              Dockerfile: $(dockerfilePath)
+              tags: $(tag)
 
     
   
