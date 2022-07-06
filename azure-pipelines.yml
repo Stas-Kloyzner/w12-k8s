@@ -1,55 +1,12 @@
-
-
+#############################################
+name: '<<YOUR PIPELINE NAME CONFIG>>'
 
 trigger:
 - master
 - feature/*
+
 pool:
   name: w7pool
-
-# stages:
-# - stage: Build
-#   displayName: Build stage
-  
-  # jobs:
-  # - job: Build
-  #   displayName: Build
-
-  #   steps:
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         sudo apt-get update && sudo apt-get upgrade -y 
-  #         sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
-  #         sudo npm install npm@latest
-  #         npm install
-  #         sudo apt-get -y install zip
-
-  #       workingDirectory: '$(agent.builddirectory)/s'
-  #     displayName: install prerequisites and node packages
-
-  #   - task: ArchiveFiles@2
-  #     inputs:
-  #       rootFolderOrFile: '$(agent.builddirectory)/s'
-  #       includeRootFolder: false
-  #       archiveType: 'zip'
-  #       archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
-  #       replaceExistingArchive: true
-  #       verbose: true
-
-  #   - task: PublishBuildArtifacts@1
-  #     inputs:
-  #       PathtoPublish: '$(agent.builddirectory)/a'
-  #       ArtifactName: 'wt-app'
-  #       publishLocation: 'Container'
-
-###########################################
-# # name: <<YOUR PIPELINE NAME CONFIG>>
-# trigger:
-# - master
-# - feature/*
-# pool: 
-#   name: w7pool
 
 variables:
   dockerRegistryServiceConnection: stas_acr_service
