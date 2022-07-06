@@ -43,7 +43,7 @@ stages:
         ArtifactName: 'wt-app'
         publishLocation: 'Container'
 
-
+###########################################
 # # name: <<YOUR PIPELINE NAME CONFIG>>
 # trigger:
 # - master
