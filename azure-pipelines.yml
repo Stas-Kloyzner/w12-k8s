@@ -77,6 +77,8 @@ stages:
           deploy:
             steps:
 
+            - script: |
+                 bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
             - task: Docker@1
               displayName: "docker pull from ACR"
               inputs:
@@ -93,8 +95,12 @@ stages:
 
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
-                 docker create --name wt_app stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)
+                 docker kill $(docker ps -q)
+                 docker rm $(docker ps -q)
+                 docker run --name wt_app -d -p 8080:8080 stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)
                  docker cp ./.env wt_app:app
+                 docker restart wt_app
+                 docker image prune -a
 
 
 
