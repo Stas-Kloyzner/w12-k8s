@@ -16,9 +16,24 @@ variables:
   tag: $(Build.BuildNumber)
 
 stages:
-  - stage: CI
+  - stage: Prerequisites
     jobs:
       - job: install_prerequisites
+        workspace:
+          clean: all
+        steps:
+        - script: |
+           sudo apt update
+           sudo apt install software-properties-common
+           sudo apt-add-repository --yes --update ppa:ansible/ansible
+           sudo apt install ansible -y
+           ansible --version
+           sudo apt-get install sshpass
+    displayName: 'install ansible'
+
+  - stage: CI
+    jobs:
+      - job: build_and_push
         workspace:
           clean: all
         steps:
@@ -31,19 +46,13 @@ stages:
               tags: $(tag)
 
 
-  - stage: DeployToStaging
+  - stage: Deploy_To_Staging
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
-  
-    - deployment: staging
-      displayName: Deploy to Staging
-      environment:
-        name: staging
-        resourceType: VirtualMachine
-      strategy:
-        runOnce:
-          deploy:
-            steps:
+      - job: Deploy_To_Staging
+        workspace:
+          clean: all
+        steps:
               - task: Docker@2
                 inputs:
                   containerRegistry: 'demo-acr'
