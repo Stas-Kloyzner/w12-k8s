@@ -91,12 +91,12 @@ stages:
               inputs:
                 secureFile: 'create_env.sh'
 
-            # - script: |
-                #  echo Installing $(caCertificate.secureFilePath) to the trusted CA directory...
-            - task: CmdLine@2
-              inputs:
-                script: './create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)'
-              displayName: create .env
+            - script: |
+                 bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+            # - task: CmdLine@2
+            #   inputs:
+            #     script: './create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)'
+            #   displayName: create .env
 
 
 
