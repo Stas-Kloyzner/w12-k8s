@@ -4,12 +4,11 @@ trigger:
 - master
 - feature/*
 
-pool:
-  vmImage: ubuntu-latest
+pool: w7pool
 
 variables:
   dockerRegistryServiceConnection: 'stas_acr_service'
-  imageRepository: 'w8_repo'
+  imageRepository: 'w8repo'
   containerRegistry: 'staskloydocker.azurecr.io'
   dockerfilePath: '$(Build.SourceDirectory)/Dockerfile'
   tag: '$(Build.BuildNumber)'
