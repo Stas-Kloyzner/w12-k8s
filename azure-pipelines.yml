@@ -67,19 +67,20 @@ stages:
     - deployment: staging
       displayName: Deploy to Staging
       environment:
-        name: <<YOUR ENVIRONMENT NAME>>
+        name: staging
         resourceType: VirtualMachine
       strategy:
         runOnce:
           deploy:
             steps:
+
             - task: Docker@1
               displayName: "docker pull from ACR"
               inputs:
-                azureSubscriptionEndpoint: '<service connection>'
-                azureContainerRegistry: <your ACR name>.azurecr.io
+                azureSubscriptionEndpoint: 'demo-acr'
+                azureContainerRegistry: stasprivateacr.azurecr.io
                 command: pull
-                arguments: '<your ACR name>.azurecr.io/<path to your image>:<version>'
+                arguments: 'stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)'
 
 
 
