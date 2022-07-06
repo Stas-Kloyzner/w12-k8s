@@ -42,7 +42,10 @@ stages:
     #   strategy:
     #     runOnce:
     #       deploy:
-      - job: install_prerequisites
+      
+      - job: manual_approval
+        displayName: "Manual Approval"
+        pool: server
         steps:
           - task: ManualValidation@0
             inputs:
