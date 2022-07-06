@@ -1,51 +1,81 @@
+name: <<YOUR PIPELINE NAME CONFIG>>
 
 trigger:
 - master
+- feature/*
 
 pool:
-  name: w7pool
+  vmImage: ubuntu-latest
+
+# variables:
+#   YOURVARKEYS: YOURVARVALUES
+#   ...
 
 stages:
-- stage: Build
-  displayName: Build stage
-  
+
+# Continuous Integration Process
+- stage: CI
   jobs:
-  - job: Build
-    displayName: Build
-
+  - job: install_prerequisites
+    workspace: 
+      clean: all
     steps:
-    - task: DockerInstaller@0
+    - task: CmdLine@2
       inputs:
-        dockerVersion: '17.09.0-ce'
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'ACR'
-        repository: 'w8-docker'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-    # - task: CmdLine@2
-    #   inputs:
-    #     script: |
-    #       sudo apt-get update && sudo apt-get upgrade -y 
-    #       sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
-    #       sudo npm install npm@latest
-    #       npm install
-    #       sudo apt-get -y install zip
+        script: |
+          sudo apt update && sudo apt-get install -y \
+          >     ca-certificates \
+          >     curl \
+          >     gnupg \
+          >     lsb-release && sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && echo \
+          >     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          >     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+      displayName: install docker
+    
+  
 
-    #     workingDirectory: '$(agent.builddirectory)/s'
-    #   displayName: install prerequisites and node packages
+# # Continuous Deployment Process for Staging Environment
+# - stage: DeployToStaging
+#   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+#   jobs:
 
-    # - task: ArchiveFiles@2
-    #   inputs:
-    #     rootFolderOrFile: '$(agent.builddirectory)/s'
-    #     includeRootFolder: false
-    #     archiveType: 'zip'
-    #     archiveFile: '$(agent.builddirectory)/a/wt-app.zip'
-    #     replaceExistingArchive: true
-    #     verbose: true
-
-    # - task: PublishBuildArtifacts@1
-    #   inputs:
-    #     PathtoPublish: '$(agent.builddirectory)/a'
-    #     ArtifactName: 'wt-app'
-    #     publishLocation: 'Container'
+#     - job: waitForValidation
+#       displayName: Wait for external validation
+#       pool: server
+#       timeoutInMinutes: 4320 # job times out in 3 days
+#       steps:
+#       - task: ManualValidation@0
+#         timeoutInMinutes: 1440 # task times out in 1 day
+#         inputs:
+#           notifyUsers: |
+#             test@test.com
+#             example@example.com
+#           instructions: 'Please validate the build configuration and resume'
+#           onTimeout: 'resume'
+      
+    
+#   - deployment: staging
+#     displayName: Deploy to Staging
+#     environment:
+#       name: <<YOUR ENVIRONMENT NAME>>
+#       resourceType: VirtualMachine
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - <<YOUR TASKS>>
+          
+# Continuous Delivery Process for Production Environment
+# - stage: DeployToProduction
+#   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+#   jobs:
+#   - deployment: production
+#     displayName: Deploy to Production
+#     environment:
+#       name: <<YOUR ENVIRONMENT NAME>>
+#       resourceType: VirtualMachine
+    # strategy:
+    #   runOnce:
+    #     deploy:
+    #       steps:
+    #       - <<YOUR TASKS>>
