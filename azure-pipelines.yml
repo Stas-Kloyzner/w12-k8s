@@ -1,5 +1,5 @@
 #############################################
-name: '<<YOUR PIPELINE NAME CONFIG>>'
+name: 'docker_app_ci_cd'
 
 trigger:
 - master
