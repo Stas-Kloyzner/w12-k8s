@@ -1,7 +1,7 @@
 # name: <<YOUR PIPELINE NAME CONFIG>>
 trigger:
   - master
-  - feature/*
+  # - feature/*
 pool: w7pool
 variables:
   dockerRegistryServiceConnection: stas_acr_service
