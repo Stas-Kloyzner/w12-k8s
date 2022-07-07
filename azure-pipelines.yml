@@ -1,8 +1,12 @@
 ############################################################
 
 trigger:
-- master
-- feature/*
+ branches:
+   include:
+     - master
+     - feature/*
+   exclude:
+     - '*'
 
 pool:
   name: self-hosted
