@@ -35,7 +35,7 @@ stages:
                 $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
                 sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
                 sudo apt install docker-compose -y
-                bash $(create_env.secureFilePath) 40.88.12.242 $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                bash $(create_env.secureFilePath) 40.88.12.242 $(oip) $(oid) $(ocs) db $(pgu) $(pgp)
                 docker rm -f $(docker ps -q)
                 # docker-compose up -d --build
                 docker-compose --env-file .env up -d --build
