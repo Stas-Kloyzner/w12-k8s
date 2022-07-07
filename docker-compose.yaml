@@ -4,10 +4,13 @@ services:
   db:
     image: postgres:14.1-alpine
     restart: always
-    labels:
-        POSTGRES_HOST: localhost
-        POSTGRES_USER: pgadmin
-        POSTGRES_PASSWORD: p@sSw0rD
+    # labels:
+    #     POSTGRES_HOST: localhost
+    #     POSTGRES_USER: pgadmin
+    #     POSTGRES_PASSWORD: p@sSw0rD
+     environment:
+      - POSTGRES_USER=pgadmin
+      - POSTGRES_PASSWORD=p@sSw0rD
     ports:
       - '5432:5432'
     volumes: 
