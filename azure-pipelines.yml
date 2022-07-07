@@ -9,27 +9,14 @@ pool:
   name: w7pool
 
 variables:
+  azureSubscriptionEndpoint: ''
   dockerRegistryServiceConnection: demo-acr
   imageRepository: w8-private-acr-repo
-  containerRegistry: stasprivateacr.azurecr.io
+  containerRegistry: stasprivateacr001.azurecr.io
   dockerfilePath: Dockerfile
   tag: $(Build.BuildNumber)
 
 stages:
-#   - stage: Prerequisites
-#     jobs:
-#       - job: install_prerequisites
-#         workspace:
-#           clean: all
-#         steps:
-#         - script: |
-#            sudo apt update
-#            sudo apt install software-properties-common
-#            sudo apt-add-repository --yes --update ppa:ansible/ansible
-#            sudo apt install ansible -y
-#            ansible --version
-#            sudo apt-get install sshpass
-#     displayName: 'install ansible'
 
   - stage: CI
     jobs:
@@ -44,21 +31,6 @@ stages:
               command: buildAndPush
               Dockerfile: $(dockerfilePath)
               tags: $(tag)
-
-
-  # - stage: Deploy_To_Staging
-  #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-  #   jobs:
-  #     - job: Deploy_To_Staging
-  #       workspace:
-  #         clean: all
-  #       steps:
-  #             - task: Docker@2
-  #               inputs:
-  #                 containerRegistry: 'demo-acr'
-  #                 command: 'start'
-  #                 container: '$(tag)'
-
 
 # Continuous Deployment Process for Staging Environment
   - stage: DeployToStaging
@@ -82,10 +54,10 @@ stages:
             - task: Docker@1
               displayName: "docker pull from ACR"
               inputs:
-                azureSubscriptionEndpoint: 'azure_pass'
-                azureContainerRegistry: stasprivateacr.azurecr.io
+                azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+                azureContainerRegistry: $(containerRegistry)
                 command: pull
-                arguments: 'stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)'
+                arguments: '$(containerRegistry)/$(imageRepository):$(tag)'
              
             - task: DownloadSecureFile@1
               name: create_env
@@ -96,7 +68,7 @@ stages:
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                  docker rm -f $(docker ps -q)
-                 docker run --name wt_app -d -p 8080:8080 stasprivateacr.azurecr.io/w8-private-acr-repo:$(tag)
+                 docker run --name wt_app -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
                  docker cp ./.env wt_app:app
                  docker restart wt_app
                  docker image prune -a -f
