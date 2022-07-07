@@ -5,6 +5,7 @@ services:
     image: postgres:14.1-alpine
     restart: always
     labels:
+        POSTGRES_HOST: ${PGHOST}
         POSTGRES_USER: ${PGUSERNAME}
         POSTGRES_PASSWORD: ${PGPASSWORD}
     ports:
