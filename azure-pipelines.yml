@@ -101,8 +101,8 @@ stages:
         pool: server
         steps:
           - task: ManualValidation@0
-            inputs:
-              notifyUsers: 'w8p-a@outlook.com'
+            # inputs:
+            #   notifyUsers: 'w8p-a@outlook.com'
       - deployment: production
         variables:
         - group: production_vars
