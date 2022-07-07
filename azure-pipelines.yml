@@ -3,7 +3,7 @@
 
 trigger:
 - master
-- feature/*
+- feature
 
 pool:
   name: self-hosted
@@ -45,7 +45,7 @@ stages:
 
 # Continuous Deployment Process for Staging Environment
   - stage: DeployToStaging
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/feature'))
     jobs:
     - deployment: staging
       variables:
@@ -86,7 +86,7 @@ stages:
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                  docker rm -f $(docker ps -q)
-                 docker run --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
+                 docker run --restart=always --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
                  docker cp ./.env $(containerName):~/app/.env
                  docker restart $(containerName)
                  docker image prune -a -f
@@ -143,7 +143,7 @@ stages:
               - script: |
                    bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                    docker rm -f $(docker ps -q)
-                   docker run --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
+                   docker run --restart=always --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
                    docker cp ./.env $(containerName):~/app/.env
                    docker restart $(containerName)
                    docker image prune -a -f
