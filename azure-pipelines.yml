@@ -2,12 +2,11 @@
 
 trigger:
  branches:
+   exclude:
+     - '*'
    include:
      - master
      - feature/*
-   exclude:
-     - '*'
-
 pool:
   name: self-hosted
 
