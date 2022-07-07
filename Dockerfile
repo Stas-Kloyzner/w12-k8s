@@ -1,6 +1,6 @@
 # set base image
 #FROM ubuntu:20.04
-FROM node:14.19.3
+FROM node:14.19-slim
 
 # set label
 LABEL maintainer="stas.kloy"
