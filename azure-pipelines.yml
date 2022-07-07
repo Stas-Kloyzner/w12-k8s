@@ -3,7 +3,7 @@
 
 trigger:
 - master
-- feature
+- feature/*
 
 pool:
   name: self-hosted
@@ -39,13 +39,28 @@ stages:
             inputs:
               containerRegistry: $(dockerRegistryServiceConnection)
               repository: $(imageRepository)
-              command: buildAndPush
+              command: build
               Dockerfile: $(dockerfilePath)
               tags: $(tag)
+            displayName: build docker image
+
+  - stage: push
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    jobs:
+      - job: push_image_to_acr
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(imageRepository)
+              command: Push
+              Dockerfile: $(dockerfilePath)
+              tags: $(tag)
+            displayName: push docker image to acr
 
 # Continuous Deployment Process for Staging Environment
   - stage: DeployToStaging
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/feature'))
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
     - deployment: staging
       variables:
