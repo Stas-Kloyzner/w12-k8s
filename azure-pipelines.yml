@@ -72,34 +72,50 @@ stages:
                  docker cp ./.env wt_app:app
                  docker restart wt_app
                  docker image prune -a -f
-
-
-
-
-
-
           
 # Continuous Delivery Process for Production Environment
-  # - stage: DeployToProduction
-  #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-  #   jobs:
-  #     - job: manual_approval
-  #       displayName: "Manual Approval"
-  #       pool: server
-  #       steps:
-  #         - task: ManualValidation@0
-  #           inputs:
-  #             notifyUsers: 'w4p-a@outlook.com'
-#   - deployment: production
-    # variables:
-    # - group: production_vars
-    # - group: okta
-#     displayName: Deploy to Production
-#     environment:
-#       name: <<YOUR ENVIRONMENT NAME>>
-#       resourceType: VirtualMachine
-    # strategy:
-    #   runOnce:
-    #     deploy:
-    #       steps:
-    #       - <<YOUR TASKS>>
+  - stage: DeployToProduction
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    jobs:
+      - job: manual_approval
+        displayName: "Manual Approval"
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            inputs:
+              notifyUsers: 'w8p-a@outlook.com'
+      - deployment: production
+        variables:
+        - group: production_vars
+        - group: okta
+        displayName: Deploy to Production
+        environment:
+          name: production
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - script: |
+                   bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+              - task: Docker@1
+                displayName: "docker pull from ACR"
+                inputs:
+                  azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+                  azureContainerRegistry: $(containerRegistry)
+                  command: pull
+                  arguments: '$(containerRegistry)/$(imageRepository):$(tag)'
+             
+              - task: DownloadSecureFile@1
+                name: create_env
+                displayName: 'Download create_env.sh ,create .env ,push .env into container'
+                inputs:
+                  secureFile: 'create_env.sh'
+
+              - script: |
+                   bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                   docker rm -f $(docker ps -q)
+                   docker run --name wt_app -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
+                   docker cp ./.env wt_app:app
+                   docker restart wt_app
+                   docker image prune -a -f
