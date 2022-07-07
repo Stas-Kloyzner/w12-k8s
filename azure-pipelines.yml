@@ -45,7 +45,7 @@ stages:
 
 # Continuous Deployment Process for Staging Environment
   - stage: DeployToStaging
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/feature'))
     jobs:
     - deployment: staging
       variables:
