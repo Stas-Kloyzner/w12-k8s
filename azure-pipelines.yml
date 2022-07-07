@@ -20,6 +20,7 @@ stages:
   - stage: CI
     jobs:
       - job: build_and_push
+        displayName: build docker image
         workspace:
           clean: all
         steps:
@@ -46,6 +47,7 @@ stages:
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
       - job: push_image_to_acr
+        displayName: push docker image to acr
         steps:
           - task: Docker@2
             inputs:
@@ -82,6 +84,7 @@ stages:
                  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
                  sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
               displayName: install docker on remote
+
             - task: Docker@1
               displayName: "docker pull from ACR"
               inputs:
@@ -92,7 +95,7 @@ stages:
              
             - task: DownloadSecureFile@1
               name: create_env
-              displayName: 'Download create_env.sh ,create .env ,push .env into container'
+              displayName: 'Download create_env.sh'
               inputs:
                 secureFile: 'create_env.sh'
 
@@ -103,19 +106,19 @@ stages:
                  docker cp ./.env $(containerName):~/app/.env
                  docker restart $(containerName)
                  docker image prune -a -f
-              displayName: run container
+              displayName: create .env , run container , push .env into container and restart container
 
 # Continuous Delivery Process for Production Environment
   - stage: DeployToProduction
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
+
       - job: manual_approval
         displayName: "Manual Approval"
         pool: server
         steps:
           - task: ManualValidation@0
-            # inputs:
-            #   notifyUsers: 'w8p-a@outlook.com'
+
       - deployment: production
         dependsOn: manual_approval
         variables:
