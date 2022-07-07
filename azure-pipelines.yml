@@ -3,7 +3,7 @@
 
 trigger:
 - master
-- feature/*
+- feature
 
 pool:
   name: self-hosted
