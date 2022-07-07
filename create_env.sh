@@ -13,7 +13,7 @@ OKTA_CLIENT_ID=$3
 OKTA_CLIENT_SECRET=$4
         
 # Postgres configuration
-PGHOST=$5-pg-f-server.postgres.database.azure.com
+PGHOST=$5
 PGUSERNAME=$6
 PGDATABASE=postgres
 PGPASSWORD=$7
