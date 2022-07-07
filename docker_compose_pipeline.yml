@@ -36,7 +36,8 @@ stages:
                 sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
                 sudo apt install docker-compose -y
                 bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
-                docker-compose up -d --build
+                # docker-compose up -d --build
+                docker-compose --env-file .env up -d --build
             displayName: install docker on agent
           
           # - task: Docker@2
