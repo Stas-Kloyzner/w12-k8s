@@ -9,8 +9,8 @@ pool:
   name: w7pool
 
 variables:
-  azureSubscriptionEndpoint: ''
-  dockerRegistryServiceConnection: private-acr
+  azureSubscriptionEndpoint: azure_pass
+  dockerRegistryServiceConnection: pacr
   imageRepository: w8-private-acr-repo
   containerRegistry: stasprivateacr001.azurecr.io
   dockerfilePath: Dockerfile
