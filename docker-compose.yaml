@@ -6,8 +6,8 @@ services:
     restart: always
     labels:
         POSTGRES_HOST: localhost
-        POSTGRES_USER: ${PGUSERNAME}
-        POSTGRES_PASSWORD: ${PGPASSWORD}
+        POSTGRES_USER: pgadmin
+        POSTGRES_PASSWORD: p@sSw0rD
     ports:
       - '5432:5432'
     volumes: 
