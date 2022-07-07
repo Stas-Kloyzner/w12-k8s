@@ -20,6 +20,7 @@ stages:
   - stage: CI
     jobs:
       - job: build_and_push
+        displayName: build docker image
         workspace:
           clean: all
         steps:
@@ -46,6 +47,7 @@ stages:
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
       - job: push_image_to_acr
+        displayName: push docker image to acr
         steps:
           - task: Docker@2
             inputs:
