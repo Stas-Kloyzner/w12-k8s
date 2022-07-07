@@ -15,6 +15,7 @@ variables:
   containerRegistry: stasprivateacr001.azurecr.io
   dockerfilePath: Dockerfile
   tag: $(Build.BuildNumber)
+  containerName: wt_app
 
 stages:
 
@@ -85,9 +86,9 @@ stages:
             - script: |
                  bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                  docker rm -f $(docker ps -q)
-                 docker run --name wt_app -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
-                 docker cp ./.env wt_app:app
-                 docker restart wt_app
+                 docker run --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
+                 docker cp ./.env $(containerName):~/app/.env
+                 docker restart $(containerName)
                  docker image prune -a -f
               displayName: run container
 
@@ -135,15 +136,15 @@ stages:
              
               - task: DownloadSecureFile@1
                 name: create_env
-                displayName: 'Download create_env.sh ,create .env ,push .env into container'
+                displayName: 'Download create_env.sh'
                 inputs:
                   secureFile: 'create_env.sh'
 
               - script: |
                    bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                    docker rm -f $(docker ps -q)
-                   docker run --name wt_app -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
-                   docker cp ./.env wt_app:app
-                   docker restart wt_app
+                   docker run --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
+                   docker cp ./.env $(containerName):~/app/.env
+                   docker restart $(containerName)
                    docker image prune -a -f
-                displayName: run container
+                displayName: create .env , run container , push .env into container and restart container
