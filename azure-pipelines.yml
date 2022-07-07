@@ -6,11 +6,11 @@ trigger:
 - feature/*
 
 pool:
-  name: w7pool
+  name: self-hosted
 
 variables:
   azureSubscriptionEndpoint: azure_pass
-  dockerRegistryServiceConnection: pacr
+  dockerRegistryServiceConnection: p-acr
   imageRepository: w8-private-acr-repo
   containerRegistry: stasprivateacr001.azurecr.io
   dockerfilePath: Dockerfile
