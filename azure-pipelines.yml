@@ -10,7 +10,7 @@ pool:
 
 variables:
   azureSubscriptionEndpoint: ''
-  dockerRegistryServiceConnection: demo-acr
+  dockerRegistryServiceConnection: private-acr
   imageRepository: w8-private-acr-repo
   containerRegistry: stasprivateacr001.azurecr.io
   dockerfilePath: Dockerfile
