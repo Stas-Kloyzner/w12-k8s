@@ -93,11 +93,16 @@ stages:
                 command: pull
                 arguments: '$(containerRegistry)/$(imageRepository):$(tag)'
             
-            
-            - task: CmdLine@2
+
+            - task: DownloadSecureFile@1
+              name: create_env
+              displayName: 'Download create_env.sh'
               inputs:
-                script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                secureFile: 'create_env.sh'
+
+            - script: bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
               displayName: create .env file
+
 
             - script: |
                  docker rm -f $(docker ps -q)
@@ -150,9 +155,13 @@ stages:
                   command: pull
                   arguments: '$(containerRegistry)/$(imageRepository):$(tag)'
                
-              - task: CmdLine@2
+              - task: DownloadSecureFile@1
+                name: create_env
+                displayName: 'Download create_env.sh'
                 inputs:
-                  script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                  secureFile: 'create_env.sh'
+                
+              - script: bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                 displayName: create .env file
                
               - script: |
