@@ -66,7 +66,8 @@ stages:
               inputs:
                 script: |
                   docker rm -f $(docker ps -q)
-                  docker-compose --env-file .env up -d --build 
+                  docker-compose --env-file .env up -d --build
+                  docker exec wt_app 'npm run initdb'
                   docker image prune -a -f
                   docker volume prune -f
               displayName: clear old containers, build and run new containers ,clear redundant images.
