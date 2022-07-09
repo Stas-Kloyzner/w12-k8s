@@ -26,6 +26,7 @@ stages:
         runOnce:
           deploy:
             steps:
+            
             - task: CmdLine@2
               inputs:
                 script: |
@@ -37,18 +38,22 @@ stages:
                   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
                   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
               displayName: install docker on remote
+
             - task: CmdLine@2
               inputs:
                 script: sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
               displayName: add use to docker group and grant sudo rights
+
             - task: CmdLine@2
               inputs:
                 script: sudo apt install docker-compose -y
               displayName: install docker compose on remote
+
             - task: CmdLine@2
               inputs:
                 script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
               displayName: create .env file
+
             - task: CmdLine@2
               inputs:
                 script: |
