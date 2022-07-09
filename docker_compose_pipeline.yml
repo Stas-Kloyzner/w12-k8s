@@ -1,8 +1,6 @@
 ############################################################
 
-trigger:
-  - master
-  - feature/*
+trigger: none
 pool:
   name: self-hosted
 
