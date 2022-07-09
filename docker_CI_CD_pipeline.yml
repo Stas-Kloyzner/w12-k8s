@@ -100,7 +100,7 @@ stages:
                 secureFile: 'create_env.sh'
 
             - script: |
-                 bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                 bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
                  docker rm -f $(docker ps -q)
                  docker run --restart=always --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
                  docker cp ./.env $(containerName):~/app/.env
@@ -157,7 +157,7 @@ stages:
                   secureFile: 'create_env.sh'
 
               - script: |
-                   bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                   bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
                    docker rm -f $(docker ps -q)
                    docker run --restart=always --name $(containerName) -d -p 8080:8080 $(containerRegistry)/$(imageRepository):$(tag)
                    docker cp ./.env $(containerName):~/app/.env
