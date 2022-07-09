@@ -26,8 +26,8 @@ services:
       - 8080:8080
     links:
       - db
-    volumes:
-      - '/home/:/src'
+    # volumes:
+    #   - '/home/:/src'
 volumes:
   db:
     driver: local
