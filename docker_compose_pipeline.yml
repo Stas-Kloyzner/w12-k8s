@@ -29,7 +29,7 @@ stages:
 
             - script: |
                  docker rm -f $(docker ps -q)
-                 
+
             - checkout: self
               submodules: true
               persistCredentials: true
@@ -71,5 +71,5 @@ stages:
                   docker rm -f $(docker ps -q)
                   docker-compose --env-file .env up -d --build 
                   docker image prune -a -f
-                  docker volume prune
+                  docker volume prune -f
               displayName: clear old containers, build and run new containers ,clear redundant images.
