@@ -95,7 +95,7 @@ stages:
              
             - task: CmdLine@2
               inputs:
-                script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
+                script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
               displayName: create .env file
 
             - script: |
@@ -151,7 +151,7 @@ stages:
                
               - task: CmdLine@2
                 inputs:
-                  script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
+                  script: bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                 displayName: create .env file
                
               - script: |
