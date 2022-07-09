@@ -62,6 +62,6 @@ stages:
               inputs:
                 script: |
                   docker rm -f $(docker ps -q)
-                  docker-compose --env-file .env up -d --build -e POSTGRES_PASSWORD=p@sSw0rD1
+                  docker-compose -e POSTGRES_PASSWORD=p@sSw0rD1 --env-file .env up -d --build 
                   docker image prune -a -f
               displayName: clear old containers, build and run new containers ,clear redundant images.
