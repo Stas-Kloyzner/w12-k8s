@@ -38,7 +38,7 @@ stages:
                 bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
                 docker rm -f $(docker ps -q)
 
-                docker-compose --env-file .env -e POSTGRES_USER=$(pgu) -e POSTGRES_PASSWORD=$(pgp) up -d --build
+                docker-compose --env-file .env up -d --build
 
                 # docker image prune -a -f
 
