@@ -1,7 +1,6 @@
 .env
 npm_modules
 npm-debug.log
-create_env.sh
 docker_CI_CD_pipeline.yml
 docker_compose_pipeline.yml
 docker-compose.yaml
