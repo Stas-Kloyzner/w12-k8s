@@ -9,9 +9,8 @@ services:
       - POSTGRES_PASSWORD=${PGPASSWORD}
     ports:
       - '5432:5432'
-    volumes: 
-      - db:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    # volumes: 
+    #   - db:/var/lib/postgresql/data
   app:
     container_name: wt_app
     build:
@@ -26,8 +25,8 @@ services:
       - 8080:8080
     links:
       - db
-    volumes:
-      - './:/src'
-volumes:
-  db:
-    driver: local
+    # volumes:
+    #   - './:/src'
+# volumes:
+#   db:
+#     driver: local
