@@ -7,7 +7,6 @@ services:
     environment:
       - POSTGRES_USER=${PGUSERNAME}
       - POSTGRES_PASSWORD=${PGPASSWORD}
-      - PORT=5432
     ports:
       - '5432:5432'
     volumes: 
