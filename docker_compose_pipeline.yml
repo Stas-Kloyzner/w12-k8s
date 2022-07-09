@@ -27,6 +27,10 @@ stages:
           deploy:
             steps:
             
+            - checkout: self
+              submodules: true
+              persistCredentials: true
+              
             - task: CmdLine@2
               inputs:
                 script: |
