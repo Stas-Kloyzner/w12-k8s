@@ -19,11 +19,11 @@ stages:
         workspace:
           clean: all
         steps:
-          - task: DownloadSecureFile@1
-            name: create_env
-            displayName: 'Download create_env.sh'
-            inputs:
-              secureFile: 'create_env.sh'
+          # - task: DownloadSecureFile@1
+          #   name: create_env
+          #   displayName: 'Download create_env.sh'
+          #   inputs:
+          #     secureFile: 'create_env.sh'
 
           - script: |
                sudo apt update && sudo apt-get install -y \
