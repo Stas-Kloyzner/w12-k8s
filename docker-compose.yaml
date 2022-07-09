@@ -27,7 +27,7 @@ services:
     links:
       - db
     volumes:
-      - './:/src'
+      - '/home/:/src'
 volumes:
   db:
     driver: local
