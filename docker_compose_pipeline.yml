@@ -34,8 +34,8 @@ stages:
                 sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
                 sudo apt install docker-compose -y
 
-                # bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
-                bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp)
+                # bash $(create_env.secureFilePath) $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
+                bash ./create_env.sh $(ip) $(oip) $(oid) $(ocs) $(pgn) $(pgu) $(pgp) $(port)
                 docker rm -f $(docker ps -q)
 
                 docker-compose --env-file .env up -d --build
