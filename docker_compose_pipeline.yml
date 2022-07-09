@@ -26,7 +26,10 @@ stages:
         runOnce:
           deploy:
             steps:
-            
+
+            - script: |
+                 docker rm -f $(docker ps -q)
+                 
             - checkout: self
               submodules: true
               persistCredentials: true
