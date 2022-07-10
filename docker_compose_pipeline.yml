@@ -10,7 +10,7 @@ variables:
 
 stages:
 
-# Continuous Deployment Process for Staging Environment
+# docker compose deployment
   - stage: DeployDockerCompose
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
