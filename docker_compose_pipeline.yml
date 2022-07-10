@@ -10,7 +10,7 @@ variables:
 
 stages:
 
-# Continuous Deployment Process for Staging Environment
+# docker compose deployment
   - stage: DeployDockerCompose
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
@@ -70,6 +70,7 @@ stages:
                   docker image prune -a -f
                   docker volume prune -f
               displayName: clear old containers, build and run new containers ,clear redundant images.
+              
             - task: CmdLine@2
               inputs:
                 script: |
