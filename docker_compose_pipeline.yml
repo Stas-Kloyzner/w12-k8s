@@ -70,6 +70,7 @@ stages:
                   docker image prune -a -f
                   docker volume prune -f
               displayName: clear old containers, build and run new containers ,clear redundant images.
+              
             - task: CmdLine@2
               inputs:
                 script: |
