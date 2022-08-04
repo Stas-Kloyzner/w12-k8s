@@ -29,8 +29,10 @@ variables:
   containerName: wt_app
   imagePullSecret: 'w12acreff0-auth'
 
+pool:
+ name: Azure Pipelines
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  # vmImageName: 'ubuntu-latest'
 
 
 stages:
