@@ -2,12 +2,13 @@
 # Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
-trigger:
-- master
+trigger: 
+  - master
+  - feature/*
 pool:
   name: k8s-agents
-resources:
-- repo: self
+# resources:
+# - repo: self
 
 # variables:
 
@@ -36,8 +37,8 @@ stages:
   jobs:
   - job: Build
     displayName: Build
-    pool:
-      vmImage: $(vmImageName)
+    # pool:
+    #   vmImage: $(vmImageName)
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
