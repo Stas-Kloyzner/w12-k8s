@@ -77,39 +77,29 @@ stages:
           Dockerfile: $(dockerfilePath)
           tags: $(tag)
 
-    # - task: Docker@2
-    #   displayName: Build and push an image to container registry
-    #   inputs:
-    #     command: buildAndPush
-    #     repository: $(imageRepository)
-    #     dockerfile: $(dockerfilePath)
-    #     containerRegistry: $(dockerRegistryServiceConnection)
-    #     tags: |
-    #       $(tag)
-
       - upload: manifests
         artifact: manifests
 
-# - stage: Deploy
-#   displayName: Deploy stage
-#   dependsOn: Build
+- stage: CD
+  displayName: Deploy to staging
+  dependsOn: CI
 
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     pool:
-#       vmImage: $(vmImageName)
-#     environment: 'w12k8s.staging'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: KubernetesManifest@0
-#             displayName: Create imagePullSecret
-#             inputs:
-#               action: createSecret
-#               secretName: $(imagePullSecret)
-#               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    # pool:
+    #   vmImage: $(vmImageName)
+    environment: 'w12k8s.staging'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
 #           - task: KubernetesManifest@0
 #             displayName: Deploy to Kubernetes cluster
