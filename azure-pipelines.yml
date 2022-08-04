@@ -105,10 +105,16 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
+              namespace: ingress-nginx
+              manifests: |
+                $(Pipeline.Workspace)/manifests/ingress.yml
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
               namespace: staging
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment-app.yml
-                $(Pipeline.Workspace)/manifests/ingress.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
