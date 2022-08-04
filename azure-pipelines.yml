@@ -30,7 +30,7 @@ variables:
   imagePullSecret: 'w12acreff0-auth'
 
 pool:
- name: Azure Pipelines
+ name: k8s-agents
   # Agent VM image name
   # vmImageName: 'ubuntu-latest'
 
