@@ -4,7 +4,8 @@
 
 trigger:
 - master
-
+pool:
+  name: k8s-agents
 resources:
 - repo: self
 
@@ -28,12 +29,6 @@ variables:
   tag: '$(Build.BuildId)'
   containerName: wt_app
   imagePullSecret: 'w12acreff0-auth'
-
-pool:
- name: k8s-agents
-  # Agent VM image name
-  # vmImageName: 'ubuntu-latest'
-
 
 stages:
 - stage: Build
