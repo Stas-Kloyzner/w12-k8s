@@ -77,8 +77,8 @@ stages:
           Dockerfile: $(dockerfilePath)
           tags: $(tag)
 
-      # - upload: manifests
-      #   artifact: manifests
+      - upload: manifests
+        artifact: manifests
 
 - stage: CD
   displayName: Deploy to staging
