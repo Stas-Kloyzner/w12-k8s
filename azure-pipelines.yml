@@ -77,8 +77,8 @@ stages:
           Dockerfile: $(dockerfilePath)
           tags: $(tag)
 
-      - upload: manifests
-        artifact: manifests
+      # - upload: manifests
+      #   artifact: manifests
 
 - stage: CD
   displayName: Deploy to staging
@@ -101,15 +101,26 @@ stages:
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
-#           - task: KubernetesManifest@0
-#             displayName: Deploy to Kubernetes cluster
-#             inputs:
-#               action: deploy
-#               manifests: |
-#                 $(Pipeline.Workspace)/manifests/deployment.yml
-#                 $(Pipeline.Workspace)/manifests/service.yml
-#               imagePullSecrets: |
-#                 $(imagePullSecret)
-#               containers: |
-#                 $(containerRegistry)/$(imageRepository):$(tag)
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              namespace: staging
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment-app.yml
+                $(Pipeline.Workspace)/manifests/ingress.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
+            # - task: KubernetesManifest@0
+            #   displayName: Deploy to Kubernetes cluster
+            #   inputs:
+            #     action: deploy
+            #     namespace: dev
+            #     manifests: |
+            #         $(Pipeline.Workspace)/manifests/deploy-app.yml
+            #     containers: |
+            #         bootcapmdevarc.azurecr.io/$(imageRepository):$(tag)
 
