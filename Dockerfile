@@ -7,11 +7,15 @@ LABEL maintainer="stas.kloy"
 # set workdir
 WORKDIR ~/app
 
-# copy repo 
-COPY . .
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
 # install node modules
 RUN npm install
+
+# Bundle app source
+COPY . .
 
 # expose port
 EXPOSE 8080
