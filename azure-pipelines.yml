@@ -24,18 +24,18 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'e854bffb-48e1-4bf2-97e4-61297efd330f'
-  imageRepository: 'wks'
+  imageRepository: 'w12-image-repo'
   containerRegistry: 'w12acr.azurecr.io'
   dockerfilePath: '**/Dockerfile'
-  tag: '$(Build.BuildId)'
+  tag: '$(Build.BuildNumber)'
   containerName: wt_app
   imagePullSecret: 'w12acreff0-auth'
 
 stages:
-- stage: Build
-  displayName: Build stage
+- stage: CI
+  displayName: CI stage
   jobs:
-  - job: build_and_push
+  - job: install_prerequisites_on_agent
     displayName: build docker image
     workspace:
       clean: all
@@ -49,24 +49,44 @@ stages:
           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
           $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
           sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
-        displayName: install docker on agent  
+        displayName: install_prerequisites_on_agent
   - job: Build
     displayName: Build
-    # pool:
-    #   vmImage: $(vmImageName)
     steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+      - task: Docker@2
+        inputs:
+          containerRegistry: $(dockerRegistryServiceConnection)
+          repository: $(imageRepository)
+          command: build
+          Dockerfile: $(dockerfilePath)
+          tags: $(tag)
+        displayName: build docker image
 
-    - upload: manifests
-      artifact: manifests
+  - job: push_image_to_acr
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    displayName: push docker image to acr
+    steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: $(dockerRegistryServiceConnection)
+          repository: $(imageRepository)
+          command: Push
+          Dockerfile: $(dockerfilePath)
+          tags: $(tag)
+        displayName: push docker image to acr
+
+    # - task: Docker@2
+    #   displayName: Build and push an image to container registry
+    #   inputs:
+    #     command: buildAndPush
+    #     repository: $(imageRepository)
+    #     dockerfile: $(dockerfilePath)
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+    #     tags: |
+    #       $(tag)
+
+      - upload: manifests
+        artifact: manifests
 
 # - stage: Deploy
 #   displayName: Deploy stage
