@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: wks 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wks
+  template:
+    metadata:
+      labels:
+        app: wks 
+    spec:
+      containers:
+        - name: wks 
+          image: w12acr.azurecr.io/wks
+          ports:
+          - containerPort: 8080
