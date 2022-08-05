@@ -99,8 +99,8 @@ stages:
             inputs:
               secureFile: 'secret-env-config.yaml'
 
-          - script: kubectl apply -f $(download_secret_env_config.secureFilePath)
-            displayName: 'apply secret_env_config.yaml'
+          # - script: kubectl apply -f $(download_secret_env_config.secureFilePath)
+          #   displayName: 'apply secret_env_config.yaml'
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
