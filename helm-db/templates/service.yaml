@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: postgresdb #{{ .Values.service.name }} #postgresdb
 spec:
-  type: {{ .Values.service.type }} #ClusterIP
+  type: {{ .Values.svc.type }} #ClusterIP
   ports:
-  - port: {{ .Values.service.ports.port }} #5432
-    targetPort: {{ .Values.service.ports.targetPort }} #5432
+  - port: {{ .Values.svc.ports.port }} #5432
+    targetPort: {{ .Values.svc.ports.targetPort }} #5432
   selector:
-    app: {{ .Values.service.selector.app}} #postgresdb
+    app: {{ .Values.svc.selector.app}} #postgresdb
 
 
 # apiVersion: v1
