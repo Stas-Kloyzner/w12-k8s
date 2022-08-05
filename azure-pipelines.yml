@@ -144,8 +144,22 @@ stages:
               namespace: 'staging'
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: './helm-db -f ./helm-db/prod-values.yaml'
+              chartPath: './helm-db'
               releaseName: 'helm-db-prod-release'
+          - task: HelmDeploy@0
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
+              azureResourceGroup: 'Kubernetes'
+              kubernetesCluster: 'w12k8s'
+              namespace: 'production'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: './helm-db'
+              releaseName: 'helm-db-prod-release'
+              arguments: '-f prod-values.yaml''
+
+
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret
