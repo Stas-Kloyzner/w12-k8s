@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: bootcapmdevarc.azurecr.io/bootcamp-app
+        image: w12acr.azurecr.io/w12-image-repo
         envFrom:
         - secretRef:
             name: secret-env-config
