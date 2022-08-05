@@ -18,10 +18,51 @@
 #           ports:
 #           - containerPort: 8080
 
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: app
+# spec:
+#   selector:
+#     matchLabels:
+#       app: app
+#   replicas: 3
+#   revisionHistoryLimit: 3
+#   minReadySeconds: 15
+#   strategy:
+#     type: RollingUpdate
+#     rollingUpdate:
+#       maxUnavailable: 1
+#       maxSurge: 1
+#   template:
+#     metadata:
+#       labels:
+#         app: app
+#     spec:
+#       containers:
+#       - name: app
+#         image: w12acr.azurecr.io/w12-image-repo
+#         envFrom:
+#         - secretRef:
+#             name: secret-env-config
+#         imagePullPolicy: Always
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: app-service
+# spec:
+#   selector:
+#     app: app
+#   ports:
+#     - port: 80 
+#       targetPort: 8080
+#       protocol: TCP
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: node-app
 spec:
   selector:
     matchLabels:
@@ -41,7 +82,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: w12acr.azurecr.io/w12-image-repo
+        image: bootcapmdevarc.azurecr.io/bootcamp-app
         envFrom:
         - secretRef:
             name: secret-env-config
@@ -56,5 +97,5 @@ spec:
     app: app
   ports:
     - port: 80 
-      targetPort: 8080
+      targetPort: 8080 # Default port for image
       protocol: TCP
