@@ -30,7 +30,7 @@ pvc:
 
 ---
 
-service:
+svc:
   name: postgresdb
   type: ClusterIP
   ports:
