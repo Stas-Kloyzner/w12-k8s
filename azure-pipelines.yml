@@ -107,8 +107,22 @@ stages:
               namespace: staging
               manifests: |
                 $(download_secret_env_config.secureFilePath)
+
+
+
+          # - task: HelmDeploy@0
+          #   displayName: Deploy postgres 
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
+          #     azureResourceGroup: 'Kubernetes'
+          #     kubernetesCluster: 'w12k8s'
+          #     namespace: 'staging'
+          #     command: 'install'
+          #     chartType: 'Name'
+          #     chartName: 'helm-db'
+              
           - task: HelmDeploy@0
-            displayName: Deploy postgres 
             inputs:
               connectionType: 'Azure Resource Manager'
               azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
@@ -116,8 +130,9 @@ stages:
               kubernetesCluster: 'w12k8s'
               namespace: 'staging'
               command: 'install'
-              chartType: 'Name'
-              chartName: 'helm-db'
+              chartType: 'FilePath'
+              chartPath: './helm-db'
+              releaseName: 'helm-db-release''
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret
