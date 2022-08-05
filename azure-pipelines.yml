@@ -130,9 +130,9 @@ stages:
               azureResourceGroup: 'Kubernetes'
               kubernetesCluster: 'w12k8s'
               namespace: 'staging'
-              command: 'upgrade --install'
+              command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: './helm-db'
+              chartPath: '-i ./helm-db'
               releaseName: 'helm-db-release'
           - task: HelmDeploy@0
             displayName: prod
