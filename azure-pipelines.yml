@@ -29,7 +29,7 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
   containerName: wt_app
-  # imagePullSecret: 'w12acreff0-auth'
+  imagePullSecret: 'w12acreff0-auth'
 
 stages:
 - stage: CI
@@ -94,12 +94,12 @@ stages:
       runOnce:
         deploy:
           steps:
-          # - task: KubernetesManifest@0
-          #   displayName: Create imagePullSecret
-          #   inputs:
-          #     action: createSecret
-          #     secretName: $(imagePullSecret)
-          #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           # - task: KubernetesManifest@0
           #   displayName: Deploy to Kubernetes cluster
@@ -115,8 +115,8 @@ stages:
               namespace: staging
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment-app.yml
-              # imagePullSecrets: |
-              #   $(imagePullSecret)
+              imagePullSecrets: |
+                $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
