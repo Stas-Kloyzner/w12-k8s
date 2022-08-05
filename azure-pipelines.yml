@@ -106,7 +106,7 @@ stages:
               manifests: |
                 $(download_secret_env_config.secureFilePath)
                 $(Pipeline.Workspace)/manifests/ingress.yml
-                $(Pipeline.Workspace)/manifests/deploy-db.yml
+                $(Pipeline.Workspace)/manifests/deploy-db.yaml
                 $(Pipeline.Workspace)/manifests/deployment-app.yml
               imagePullSecrets: |
                 $(imagePullSecret)
