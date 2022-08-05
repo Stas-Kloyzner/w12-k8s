@@ -89,13 +89,16 @@ stages:
           #     secretName: $(imagePullSecret)
           #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
+          #  - script: kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          # kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            # displayName: 'apply secret_env_config.yaml'
           - task: DownloadSecureFile@1
-            name: Download_secret_env_config
+            name: download_secret_env_config
             displayName: 'Download secret_env_config.yaml'
             inputs:
               secureFile: 'secret-env-config.yaml'
 
-          - script: kubectl apply -f $(apply_secret_env_config.secureFilePath)
+          - script: kubectl apply -f $(download_secret_env_config.secureFilePath)
             displayName: 'apply secret_env_config.yaml'
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
