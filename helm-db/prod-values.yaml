@@ -20,15 +20,12 @@ deploy:
     persistentVolumeClaim:
       claimName: pvc-postgres
 
----
 
 pvc:
   name: pvc-postgres
   accessModes: ReadWriteOnce
   storageClassName: managed-premium
   storage: 10Gi
-
----
 
 svc:
   name: postgresdb
