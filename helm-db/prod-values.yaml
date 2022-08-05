@@ -1,12 +1,12 @@
 deploy:
-  name: postgresdb
+  name: postgresdb-prod
   replicas: 1
   selector:
-    app: postgresdb
+    app: postgresdb-prod
   labels:
-    app: postgresdb
+    app: postgresdb-prod
   containers:
-    name: postgresdb
+    name: postgresdb-prod
     image: postgres:latest
     containerPort: 5432
     envFrom:
@@ -18,21 +18,20 @@ deploy:
   volumes:
     name: database
     persistentVolumeClaim:
-      claimName: pvc-postgres
-
+      claimName: pvc-postgres-prod
 
 pvc:
-  name: pvc-postgres
+  name: pvc-postgres-prod
   accessModes: ReadWriteOnce
   storageClassName: managed-premium
   storage: 10Gi
 
 svc:
-  name: postgresdb
+  name: postgresdb-prod
   type: ClusterIP
   ports:
     port: 5432
     targetPort: 5432
   selector:
-    app: postgresdb
+    app: postgresdb-prod
 
