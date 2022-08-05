@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgresdb 
+  name: {{ .Values.svc.name }} #postgresdb 
 spec:
   type: {{ .Values.svc.type }} #ClusterIP
   ports:
