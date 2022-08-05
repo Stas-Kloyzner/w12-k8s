@@ -19,7 +19,7 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
   containerName: wt_app
-  imagePullSecret: 'w12acr-imagePullSecret'
+  imagePullSecret: 'w12acrimagePullSecret'
 
 stages:
 - stage: CI
