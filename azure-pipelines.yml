@@ -22,57 +22,57 @@ variables:
   imagePullSecret: 'w12acreff0-auth'
 
 stages:
-- stage: CI
-  displayName: CI stage
-  jobs:
-  - job: install_prerequisites_on_agent
-    displayName: install prerequisites on agent
-    workspace:
-      clean: all
-    steps:
-      - script: |
-          sudo apt update && sudo apt-get install -y \
-          ca-certificates \
-          curl \
-          gnupg \
-          lsb-release && sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
-          # sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
-      - task: HelmInstaller@0
-        inputs:
-          helmVersion: '2.14.1'
-          installKubectl: true
+# - stage: CI
+#   displayName: CI stage
+#   jobs:
+#   - job: install_prerequisites_on_agent
+#     displayName: install prerequisites on agent
+#     workspace:
+#       clean: all
+#     steps:
+#       - script: |
+#           sudo apt update && sudo apt-get install -y \
+#           ca-certificates \
+#           curl \
+#           gnupg \
+#           lsb-release && sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && echo \
+#           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+#           $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+#           # sudo usermod -aG docker $USER && sudo usermod -aG root $USER && sudo chmod 777 /var/run/docker.sock
+#       - task: HelmInstaller@0
+#         inputs:
+#           helmVersion: '2.14.1'
+#           installKubectl: true
 
-  - job: build_docker_image
-    dependsOn: install_prerequisites_on_agent
-    displayName: build docker image
-    steps:
-      - task: Docker@2
-        displayName: build docker image
-        inputs:
-          containerRegistry: $(dockerRegistryServiceConnection)
-          repository: $(imageRepository)
-          command: build
-          Dockerfile: $(dockerfilePath)
-          tags: $(tag)
+#   - job: build_docker_image
+#     dependsOn: install_prerequisites_on_agent
+#     displayName: build docker image
+#     steps:
+#       - task: Docker@2
+#         displayName: build docker image
+#         inputs:
+#           containerRegistry: $(dockerRegistryServiceConnection)
+#           repository: $(imageRepository)
+#           command: build
+#           Dockerfile: $(dockerfilePath)
+#           tags: $(tag)
 
-  - job: push_image_to_acr
-    dependsOn: build_docker_image
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-    displayName: push docker image to acr
-    steps:
-      - task: Docker@2
-        displayName: push docker image to acr
-        inputs:
-          containerRegistry: $(dockerRegistryServiceConnection)
-          repository: $(imageRepository)
-          command: Push
-          Dockerfile: $(dockerfilePath)
-          tags: $(tag)
+#   - job: push_image_to_acr
+#     dependsOn: build_docker_image
+#     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+#     displayName: push docker image to acr
+#     steps:
+#       - task: Docker@2
+#         displayName: push docker image to acr
+#         inputs:
+#           containerRegistry: $(dockerRegistryServiceConnection)
+#           repository: $(imageRepository)
+#           command: Push
+#           Dockerfile: $(dockerfilePath)
+#           tags: $(tag)
 
-      - upload: manifests
-        artifact: manifests
+#       - upload: manifests
+#         artifact: manifests
 
 - stage: CD
   displayName: Deploy to staging
@@ -86,32 +86,43 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
+          - task: HelmDeploy@0
             inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
+              azureResourceGroup: 'Kubernetes'
+              kubernetesCluster: 'w12k8s'
+              namespace: 'staging'
+              command: 'install'
+              chartType: 'Name'
+              chartName: 'helm-db'
+              
+          # - task: KubernetesManifest@0
+          #   displayName: Create imagePullSecret
+          #   inputs:
+          #     action: createSecret
+          #     secretName: $(imagePullSecret)
+          #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           #  - script: kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
           # kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
             # displayName: 'apply secret_env_config.yaml'
-          - task: DownloadSecureFile@1
-            name: download_secret_env_config
-            displayName: 'Download secret_env_config.yaml'
-            inputs:
-              secureFile: 'secret-env-config.yaml'
-          - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
-            inputs:
-              action: deploy
-              namespace: staging
-              manifests: |
-                $(download_secret_env_config.secureFilePath)
-                $(Pipeline.Workspace)/manifests/ingress.yml
-                $(Pipeline.Workspace)/manifests/deploy-db.yaml
-                $(Pipeline.Workspace)/manifests/deployment-app.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
-              containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
+          # - task: DownloadSecureFile@1
+          #   name: download_secret_env_config
+          #   displayName: 'Download secret_env_config.yaml'
+          #   inputs:
+          #     secureFile: 'secret-env-config.yaml'
+          # - task: KubernetesManifest@0
+          #   displayName: Deploy to Kubernetes cluster
+          #   inputs:
+          #     action: deploy
+          #     namespace: staging
+          #     manifests: |
+          #       $(download_secret_env_config.secureFilePath)
+          #       $(Pipeline.Workspace)/manifests/ingress.yml
+          #       $(Pipeline.Workspace)/manifests/deploy-db.yaml
+          #       $(Pipeline.Workspace)/manifests/deployment-app.yml
+          #     imagePullSecrets: |
+          #       $(imagePullSecret)
+          #     containers: |
+          #       $(containerRegistry)/$(imageRepository):$(tag)
