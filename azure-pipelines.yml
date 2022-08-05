@@ -132,7 +132,7 @@ stages:
               command: 'install'
               chartType: 'FilePath'
               chartPath: './helm-db'
-              releaseName: 'helm-db-release''
+              releaseName: 'helm-db-release'
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret
@@ -142,8 +142,10 @@ stages:
           #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           #  - script: kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          # kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
-            # displayName: 'apply secret_env_config.yaml'
+          #   kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          #   displayName: 'apply secret_env_config.yaml'
+            
+
           # - task: DownloadSecureFile@1
           #   name: download_secret_env_config
           #   displayName: 'Download secret_env_config.yaml'
