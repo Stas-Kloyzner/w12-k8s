@@ -1,4 +1,4 @@
-deploy-db:
+deploy:
   name: postgresdb
   replicas: 1
   selector:
