@@ -76,7 +76,7 @@ stages:
 
 - stage: CD
   displayName: Deploy to staging
-  dependsOn: CI
+  # dependsOn: CI
 
   jobs:
   - deployment: Deploy
@@ -96,7 +96,7 @@ stages:
               command: 'install'
               chartType: 'Name'
               chartName: 'helm-db'
-              
+
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret
           #   inputs:
