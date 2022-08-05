@@ -195,7 +195,7 @@ stages:
           #       $(containerRegistry)/$(imageRepository):$(tag)
 - stage: CDP
   displayName: Deploy to production
-  dependsOn: Deploy to staging
+  dependsOn: CD
 
   jobs:
   - deployment: Deploy
