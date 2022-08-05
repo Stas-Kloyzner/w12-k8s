@@ -19,7 +19,7 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
   containerName: wt_app
-  # imagePullSecret: 'w12acrimagepullSecret'
+  imagePullSecret: 'w12acrimagepullSecret'
 
 stages:
 - stage: CI
@@ -83,12 +83,12 @@ stages:
       runOnce:
         deploy:
           steps:
-          # - task: KubernetesManifest@0
-          #   displayName: Create imagePullSecret
-          #   inputs:
-          #     action: createSecret
-          #     secretName: $(imagePullSecret)
-          #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           #  - script: kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
           # kubectl create secret generic hosturl --from-literal=HOST_URL=$(kubectl get svc ingress-nginx-controller -n ingress-nginx --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
@@ -98,9 +98,6 @@ stages:
             displayName: 'Download secret_env_config.yaml'
             inputs:
               secureFile: 'secret-env-config.yaml'
-
-          # - script: kubectl apply -f $(download_secret_env_config.secureFilePath)
-          #   displayName: 'apply secret_env_config.yaml'
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
@@ -111,7 +108,7 @@ stages:
                 $(Pipeline.Workspace)/manifests/ingress.yml
                 $(Pipeline.Workspace)/manifests/deploy-db.yml
                 $(Pipeline.Workspace)/manifests/deployment-app.yml
-              # imagePullSecrets: |
-              #   $(imagePullSecret)
+              imagePullSecrets: |
+                $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
