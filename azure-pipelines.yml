@@ -22,14 +22,14 @@ variables:
   imagePullSecret: 'w12acreff0-auth'
 
 stages:
-# - stage: CI
-#   displayName: CI stage
-#   jobs:
-#   - job: install_prerequisites_on_agent
-#     displayName: install prerequisites on agent
-#     workspace:
-#       clean: all
-#     steps:
+- stage: CI
+  displayName: CI stage
+  jobs:
+  - job: install_prerequisites_on_agent
+    displayName: install prerequisites on agent
+    workspace:
+      clean: all
+    steps:
 #       - script: |
 #           sudo apt update && sudo apt-get install -y \
 #           ca-certificates \
@@ -71,12 +71,12 @@ stages:
 #           Dockerfile: $(dockerfilePath)
 #           tags: $(tag)
 
-#       - upload: manifests
-#         artifact: manifests
+      - upload: helm-db
+        artifact: helm-db
 
 - stage: CD
   displayName: Deploy to staging
-  # dependsOn: CI
+  dependsOn: CI
 
   jobs:
   - deployment: Deploy
