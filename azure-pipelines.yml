@@ -86,6 +86,10 @@ stages:
       runOnce:
         deploy:
           steps:
+          - task: HelmInstaller@0
+            inputs:
+              helmVersion: '2.14.1'
+              installKubectl: true
           - task: KubernetesManifest@0
             displayName: Deploy secrets 
             inputs:
