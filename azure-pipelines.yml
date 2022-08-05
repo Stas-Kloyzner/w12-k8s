@@ -19,7 +19,7 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
   containerName: wt_app
-  imagePullSecret: 'w12acrimagePullSecret'
+  # imagePullSecret: 'w12acrimagepullSecret'
 
 stages:
 - stage: CI
@@ -82,12 +82,12 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
-            inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+          # - task: KubernetesManifest@0
+          #   displayName: Create imagePullSecret
+          #   inputs:
+          #     action: createSecret
+          #     secretName: $(imagePullSecret)
+          #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           - task: DownloadSecureFile@1
             name: Download_secret_env_config
@@ -106,8 +106,8 @@ stages:
                 $(Pipeline.Workspace)/manifests/ingress.yml
                 $(Pipeline.Workspace)/manifests/deploy-db.yml
                 $(Pipeline.Workspace)/manifests/deployment-app.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
+              # imagePullSecrets: |
+              #   $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
