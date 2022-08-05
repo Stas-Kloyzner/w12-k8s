@@ -158,7 +158,7 @@ stages:
               chartType: 'FilePath'
               chartPath: './helm-db'
               releaseName: 'helm-db-prod-release'
-              arguments: '-f prod-values.yaml'
+              arguments: '-f ./helm-db/prod-values.yaml'
 
 
 
