@@ -10,16 +10,6 @@ pool:
 # resources:
 # - repo: self
 
-# variables:
-
-#   azureSubscriptionEndpoint: azure_pass
-#   dockerRegistryServiceConnection: p-acr
-#   imageRepository: w8-private-acr-repo
-#   containerRegistry: stasprivateacr001.azurecr.io
-#   dockerfilePath: Dockerfile
-#   tag: $(Build.BuildNumber)
-#   containerName: wt_app
-
 variables:
 
   # Container registry service connection established during pipeline creation
@@ -29,7 +19,7 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildNumber)'
   containerName: wt_app
-  imagePullSecret: 'w12acreff0-auth'
+  imagePullSecret: 'w12acr-imagePullSecret'
 
 stages:
 - stage: CI
@@ -87,8 +77,6 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    # pool:
-    #   vmImage: $(vmImageName)
     environment: 'w12k8s.staging'
     strategy:
       runOnce:
@@ -101,32 +89,26 @@ stages:
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
-          # - task: KubernetesManifest@0
-          #   displayName: Deploy to Kubernetes cluster
-          #   inputs:
-          #     action: deploy
-          #     namespace: ingress-nginx
-          #     manifests: |
-          #       $(Pipeline.Workspace)/manifests/ingress.yml
+          - task: DownloadSecureFile@1
+            name: Download_secret_env_config
+            displayName: 'Download secret_env_config.yaml'
+            inputs:
+              secureFile: 'secret-env-config.yaml'
+
+          - script: kubectl apply -f $(apply_secret_env_config.secureFilePath)
+            displayName: 'apply secret_env_config.yaml'
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
               namespace: staging
               manifests: |
+                $(Pipeline.Workspace)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/deploy-db.yml
                 $(Pipeline.Workspace)/manifests/deployment-app.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
-            # - task: KubernetesManifest@0
-            #   displayName: Deploy to Kubernetes cluster
-            #   inputs:
-            #     action: deploy
-            #     namespace: dev
-            #     manifests: |
-            #         $(Pipeline.Workspace)/manifests/deploy-app.yml
-            #     containers: |
-            #         bootcapmdevarc.azurecr.io/$(imageRepository):$(tag)
 
