@@ -86,6 +86,8 @@ stages:
       runOnce:
         deploy:
           steps:
+          - script: sudo apt-get install unzip
+            displayName: install unzip
           - task: HelmInstaller@0
             inputs:
               helmVersion: '2.14.1'
