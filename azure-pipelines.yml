@@ -144,7 +144,7 @@ stages:
               namespace: 'staging'
               command: 'install'
               chartType: 'FilePath'
-              chartPath: './helm-db ./helm-db/prod-values'
+              chartPath: './helm-db -f prod-values.yaml'
               releaseName: 'helm-db-prod-release'
 
           # - task: KubernetesManifest@0
