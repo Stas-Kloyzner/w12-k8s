@@ -1,0 +1,42 @@
+deploy:
+  name: wt-app-prod
+  selector:
+    app: wt-app-prod
+  replicas: 3
+  revisionHistoryLimit: 3
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate
+    maxUnavailable: 1
+    maxSurge: 1
+  template:
+    labels:
+      app: wt-app-prod
+  containers:
+    name: wt-app-prod
+    image: w12acr.azurecr.io/w12-image-repo
+    envFrom:
+      name: secret-env-config-prod
+    imagePullPolicy: Always
+
+service:
+  name: app-service-prod
+  selector:
+    app: wt-app-prod
+  port: 80 
+  targetPort: 8080 # Default port for the Docker image
+  protocol: TCP
+
+ingress:
+  name: app-ingress-prod
+  annotations:
+    target: /
+  ingressClassName: nginx
+  rules:
+    path: /
+    pathType: Prefix
+  backend:
+    service:
+      name: app-service-prod
+      port:
+        number: 8080

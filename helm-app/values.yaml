@@ -1,0 +1,42 @@
+deploy:
+  name: wt-app-stage
+  selector:
+    app: wt-app-stage
+  replicas: 3
+  revisionHistoryLimit: 3
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate
+    maxUnavailable: 1
+    maxSurge: 1
+  template:
+    labels:
+      app: wt-app-stage
+  containers:
+    name: wt-app-stage
+    image: w12acr.azurecr.io/w12-image-repo
+    envFrom:
+      name: secret-env-config-stage
+    imagePullPolicy: Always
+
+service:
+  name: app-service-stage
+  selector:
+    app: wt-app-stage
+  port: 80 
+  targetPort: 8080 # Default port for the Docker image
+  protocol: TCP
+
+ingress:
+  name: app-ingress-stage
+  annotations:
+    target: /stage
+  ingressClassName: nginx
+  rules:
+    path: /stage
+    pathType: Prefix
+  backend:
+    service:
+      name: app-service-stage
+      port:
+        number: 8080
