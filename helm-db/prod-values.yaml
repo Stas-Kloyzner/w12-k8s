@@ -26,7 +26,7 @@ pvc:
   storageClassName: managed-premium
   storage: 10Gi
 
-svc:
+service:
   name: postgresdb-prod
   type: ClusterIP
   ports:
