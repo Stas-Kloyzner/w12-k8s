@@ -10,7 +10,7 @@ deploy:
     image: postgres:latest
     containerPort: 5432
     envFrom:
-      name: secret-env-config
+      name: secret-db-config
     volumeMounts:
       name: database-prod
       mountPath: /var/lib/postgresql
