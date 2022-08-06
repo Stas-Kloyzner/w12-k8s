@@ -30,7 +30,7 @@ service:
 ingress:
   name: app-ingress-stage
   annotations:
-    target: /stage
+    target: /
   ingressClassName: nginx
   rules:
     path: /stage
