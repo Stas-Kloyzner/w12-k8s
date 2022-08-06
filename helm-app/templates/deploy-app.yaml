@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deploy.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.deploy.selector.app }}
+  replicas: {{ .Values.deploy.replicas }}
+  revisionHistoryLimit: {{ .Values.deploy.revisionHistoryLimit }}
+  minReadySeconds: {{ .Values.deploy.minReadySeconds }}
+  strategy:
+    type: {{ .Values.deploy.strategy.type }}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.deploy.strategy.maxUnavailable }}
+      maxSurge: {{ .Values.deploy.strategy.maxSurge }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deploy.template.labels.app }}
+    spec:
+      containers:
+      - name: {{ .Values.deploy.containers.name }}
+        image: {{ .Values.deploy.containers.image }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.deploy.containers.envFrom.name }}
+        imagePullPolicy: {{ .Values.deploy.containers.imagePullPolicy }}
