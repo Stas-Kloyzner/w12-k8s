@@ -127,20 +127,35 @@ stages:
               chartPath: './helm-db'
               releaseName: 'helm-db-stage'
 
-
-          # - task: HelmDeploy@0
-          #   displayName: prod
-          #   inputs:
-          #     connectionType: 'Azure Resource Manager'
-          #     azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
-          #     azureResourceGroup: 'Kubernetes'
-          #     kubernetesCluster: 'w12k8s'
-          #     namespace: 'staging'
-          #     command: 'upgrade'
-          #     chartType: 'FilePath'
-          #     chartPath: './helm-db'
-          #     releaseName: 'helm-db-prod-release'
-          # - task: HelmDeploy@0
+############### Download env config file ###################
+          - task: DownloadSecureFile@1
+            name: secret_env_config
+            displayName: Download env config file
+            inputs:
+              secureFile: 'secret-env-config-stage.yaml'
+            
+############### deploy env config file ###################
+          - task: KubernetesManifest@0
+            displayName: deploy env config file 
+            inputs:
+              action: deploy
+              namespace: staging
+              manifests: |
+                $(secret_denv_config.secureFilePath)
+              
+############### deploy wt-app for staging ###################
+          - task: HelmDeploy@0
+            displayName: deploy wt-app for staging
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
+              azureResourceGroup: 'Kubernetes'
+              kubernetesCluster: 'w12k8s'
+              namespace: 'staging'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: './helm-app'
+              releaseName: 'helm-app-stage'
 
 
           # - task: KubernetesManifest@0
@@ -174,52 +189,56 @@ stages:
           #       $(imagePullSecret)
           #     containers: |
           #       $(containerRegistry)/$(imageRepository):$(tag)
-- stage: CDP
-  displayName: Deploy to production
-  dependsOn: CD
 
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: 'w12k8s.production'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
 
-          - script: sudo apt-get install unzip
-            displayName: install unzip
 
-          - task: HelmInstaller@0
-            inputs:
-              helmVersion: '2.14.1'
-              installKubectl: true
 
-          - task: DownloadSecureFile@1
-            name: download_secret_env_config
-            displayName: 'Download secret_env_config.yaml'
-            inputs:
-              secureFile: 'secret-env-config.yaml'
+# - stage: CDP
+#   displayName: Deploy to production
+#   dependsOn: CD
+
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     environment: 'w12k8s.production'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+
+#           - script: sudo apt-get install unzip
+#             displayName: install unzip
+
+#           - task: HelmInstaller@0
+#             inputs:
+#               helmVersion: '2.14.1'
+#               installKubectl: true
+
+#           - task: DownloadSecureFile@1
+#             name: download_secret_env_config
+#             displayName: 'Download secret_env_config.yaml'
+#             inputs:
+#               secureFile: 'secret-env-config.yaml'
             
           
-          - task: KubernetesManifest@0
-            displayName: Deploy secrets 
-            inputs:
-              action: deploy
-              namespace: production
-              manifests: |
-                $(download_secret_env_config.secureFilePath)
+#           - task: KubernetesManifest@0
+#             displayName: Deploy secrets 
+#             inputs:
+#               action: deploy
+#               namespace: production
+#               manifests: |
+#                 $(download_secret_env_config.secureFilePath)
 
-          - task: HelmDeploy@0
-            displayName: prod
-            inputs:
-              connectionType: 'Azure Resource Manager'
-              azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
-              azureResourceGroup: 'Kubernetes'
-              kubernetesCluster: 'w12k8s'
-              namespace: 'production'
-              command: 'upgrade'
-              chartType: 'FilePath'
-              chartPath: './helm-db'
-              releaseName: 'helm-db-prod-release'
-              arguments: '-f ./helm-db/prod-values.yaml'
+#           - task: HelmDeploy@0
+#             displayName: prod
+#             inputs:
+#               connectionType: 'Azure Resource Manager'
+#               azureSubscription: 'Azure Pass - Sponsorship(c7e58da0-885b-44ca-9236-e4d7a57ee3be)'
+#               azureResourceGroup: 'Kubernetes'
+#               kubernetesCluster: 'w12k8s'
+#               namespace: 'production'
+#               command: 'upgrade'
+#               chartType: 'FilePath'
+#               chartPath: './helm-db'
+#               releaseName: 'helm-db-prod-release'
+#               arguments: '-f ./helm-db/prod-values.yaml'
