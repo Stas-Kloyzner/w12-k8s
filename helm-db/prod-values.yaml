@@ -12,11 +12,11 @@ deploy:
     envFrom:
       name: secret-env-config
     volumeMounts:
-      name: database
+      name: database-prod
       mountPath: /var/lib/postgresql
       subPath: backup
   volumes:
-    name: database
+    name: database-prod
     persistentVolumeClaim:
       claimName: pvc-postgres-prod
 
